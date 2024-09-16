@@ -3,7 +3,7 @@ title: "Taehwan (Jack) Kim"
 image: images/army_thjk.jpeg
 about:
   template: trestles
-  image-width: 10em
+  image-width: 15em
   image-shape: rectangle
   links:
     - text: LinkedIn
