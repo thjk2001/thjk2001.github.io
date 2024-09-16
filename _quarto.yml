@@ -9,9 +9,7 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
-        text: About
       - resources.qmd
-        text: Resources
 
 format:
   html:
