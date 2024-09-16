@@ -1,11 +1,17 @@
 ---
-title: "thjk2001.github.io"
+title: "Taehwan (Jack) Kim"
+image: images/army_thjk.jpeg
+about:
+  template: trestles
+  image-width: 10em
+  image-shape: rectangle
+  links:
+    - text: LinkedIn
+      href: https://www.linkedin.com/in/taehwan-kim-jack
+    - text: Email
+      href: tkaa2020@mymail.pomona.edu
 ---
 
-This is a Quarto website.
+Greetings! I'm Jack. Junior and Economics major at Pomona College. Formerly of Class of 2024, finally back at school after serving in the Republic of Korea Army Special Forces. My interest lies in the world of finance and value investing. Love to play soccer (formely of PP Men's Varsity Soccer) and love to share my military endeavors. Lifelong Arsenal fan.
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
 
-```{r}
-1 + 1
-```
