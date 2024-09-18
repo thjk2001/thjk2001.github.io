@@ -24,7 +24,7 @@ tuesdata <- tidytuesdayR::tt_load(2023, week = 14)
 
 soccer <- tuesdata$soccer
 ```
-```{r}
+```{r, echo=FALSE}
 library(tidyverse)
 
 arsenal_yellow_by_referee <- soccer |>
@@ -41,7 +41,7 @@ arsenal_yellow_by_referee <- soccer |>
 arsenal_yellow_by_referee
 
 ```
-```{r, fig.height=5, fig.width=6}
+```{r, fig.height=5, fig.width=6, echo=FALSE}
 library(ggplot2)
 
 ggplot(arsenal_yellow_by_referee, aes(x = reorder(Referee, -Total_Yellow_Cards), y = Total_Yellow_Cards)) +
