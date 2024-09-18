@@ -6,6 +6,7 @@ author: Jack Kim
 date: September 18, 2024
 format: html
 execute:
+  echo: false
   warning: false
   message: false
 
@@ -61,4 +62,4 @@ ggplot(arsenal_yellow_by_referee, aes(x = reorder(Referee, -Total_Yellow_Cards),
     panel.grid.minor.y = element_blank()  
   )
 ```
-Craig Pawson handed out the most yellow cards to Arsenal.
+The bar chart represents the total number of yellow cards each referee has given to Arsenal. Craig Pawson handed out the most yellow cards to Arsenal, with 9 cards given.

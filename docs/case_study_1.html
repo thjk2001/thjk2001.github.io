@@ -169,32 +169,8 @@ ul.task-list li input[type="checkbox"] {
 
 <p><a href="https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06">TidyTuesday Reference</a></p>
 <p><a href="https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/">Original Data Source</a></p>
-<p>Objective: Let’s find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). Which countries have produced the best talents?</p>
+<p>Objective: Usually it is the Olympic athletes that receive the fame. However, at the end of the day they each represent their country with pride. Let’s find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). So, which countries have produced the best talents?</p>
 <div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>---- Compiling #TidyTuesday Information for 2024-08-06 ----
---- There is 1 file available ---
-
-
-── Downloading files ───────────────────────────────────────────────────────────
-
-  1 of 1: "olympics.csv"</code></pre>
-</div>
-</div>
-<div class="cell">
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.5
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.1     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.1
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
-`summarise()` has grouped output by 'name'. You can override using the `.groups` argument.</code></pre>
-</div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10 × 3
    name                                                team         total_medals
@@ -222,7 +198,17 @@ ul.task-list li input[type="checkbox"] {
 6 Russia            1</code></pre>
 </div>
 </div>
-<p>USSR and United States produced the highest number of most successful athletes.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="case_study_1_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>USSR and United States produced the highest number of most successful athletes. Russia (formerly USSR) and the US usually rank top 3 for medal counts. It is actually surprising to find China not represented in the list.</p>
+<p>As for most successful athletes, Michael Phelps is by far has won the most medals (28).</p>
 
 
 

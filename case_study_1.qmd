@@ -6,6 +6,7 @@ author: Jack Kim
 date: September 18, 2024
 format: html
 execute:
+  echo: false
   warning: false
   message: false
 ---
@@ -42,6 +43,18 @@ top_nations <- top_athletes |>
 
 top_nations
 ```
+
+```{r}
+ggplot(top_nations, aes(x = reorder(team, -count), y = count)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Number of Top 10 Athletes by Country",
+       x = "Country (Team)",
+       y = "Number of Athletes") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
 USSR and United States produced the highest number of most successful athletes. Russia (formerly USSR) and the US usually rank top 3 for medal counts. It is actually surprising to find China not represented in the list.
 
 As for most successful athletes, Michael Phelps is by far has won the most medals (28).
