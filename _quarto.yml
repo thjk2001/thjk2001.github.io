@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "thjk2001.github.io"
+  title: "Taehwan (Jack) Kim"
   navbar:
     left:
       - href: index.qmd
