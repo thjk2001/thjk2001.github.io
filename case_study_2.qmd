@@ -1,3 +1,13 @@
 ---
-title: "Case Analysis 2: "
+title: "Case Analysis 2: Premier League 2021-2022"
+description: |
+  Analysis of Super Mario Kart data from TidyTuesday
+author: Jack Kim
+date: September 18, 2024
+format: html
 ---
+
+```{r}
+
+```
+

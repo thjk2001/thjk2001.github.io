@@ -1,3 +1,13 @@
 ---
-title: "Case Analysis 1: "
+title: "Case Analysis 1: Big Tech Stock Prices"
+description: |
+  Analysis of Super Mario Kart data from TidyTuesday
+author: Jack Kim
+date: September 18, 2024
+format: html
 ---
+
+```{r}
+
+```
+
