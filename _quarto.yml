@@ -12,13 +12,13 @@ website:
         text: About
       - href: resources.qmd
         text: Resources
-      - href: tidytuesday.qmd
-        text: Data Viz
+      - text: Data Viz
+        menu:
           - href: case_study_1.qmd
             text: Case 1
           - href: case_study_2.qmd
             text: Case 2
-
+        
 format:
   html:
     theme: cosmo
