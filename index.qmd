@@ -3,7 +3,7 @@ title: "Taehwan (Jack) Kim"
 image: images/thjk_profile.jpeg
 about:
   template: trestles
-  image-width: 16em
+  image-width: 17em
   image-shape: rectangle
   links:
     - text: LinkedIn
