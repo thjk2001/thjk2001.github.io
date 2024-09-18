@@ -8,9 +8,9 @@
 
 <meta name="author" content="Jack Kim">
 <meta name="dcterms.date" content="2024-09-18">
-<meta name="description" content="Analysis of Super Mario Kart data from TidyTuesday">
+<meta name="description" content="Nations that Produced the Most Talented Athletes">
 
-<title>Taehwan (Jack) Kim - Case Analysis 1: Big Tech Stock Prices</title>
+<title>Taehwan (Jack) Kim - Case Analysis 1: Olympics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -133,12 +133,12 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Case Analysis 1: Big Tech Stock Prices</h1>
+<h1 class="title">Case Analysis 1: Olympics</h1>
 </div>
 
 <div>
   <div class="description">
-    <p>Analysis of Super Mario Kart data from TidyTuesday</p>
+    <p>Nations that Produced the Most Talented Athletes</p>
   </div>
 </div>
 
@@ -167,6 +167,62 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>TidyTuesday Reference: https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06</p>
+<p>Original Data Source: https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/</p>
+<p>Objective: Let’s find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). Which countries have produced the best talents?</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>---- Compiling #TidyTuesday Information for 2024-08-06 ----
+--- There is 1 file available ---
+
+
+── Downloading files ───────────────────────────────────────────────────────────
+
+  1 of 1: "olympics.csv"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.5
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.5.1     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors
+`summarise()` has grouped output by 'name'. You can override using the `.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 3
+   name                                                team         total_medals
+   &lt;chr&gt;                                               &lt;chr&gt;               &lt;int&gt;
+ 1 "Michael Fred Phelps, II"                           United Stat…           28
+ 2 "Larysa Semenivna Latynina (Diriy-)"                Soviet Union           18
+ 3 "Nikolay Yefimovich Andrianov"                      Soviet Union           15
+ 4 "Borys Anfiyanovych Shakhlin"                       Soviet Union           13
+ 5 "Edoardo Mangiarotti"                               Italy                  13
+ 6 "Ole Einar Bjrndalen"                               Norway                 13
+ 7 "Takashi Ono"                                       Japan                  13
+ 8 "Aleksey Yuryevich Nemov"                           Russia                 12
+ 9 "Dara Grace Torres (-Hoffman, -Minas)"              United Stat…           12
+10 "Jennifer Elisabeth \"Jenny\" Thompson (-Cumpelik)" United Stat…           12</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  team          count
+  &lt;chr&gt;         &lt;int&gt;
+1 Soviet Union      3
+2 United States     3
+3 Italy             1
+4 Japan             1
+5 Norway            1
+6 Russia            1</code></pre>
+</div>
+</div>
+<p>USSR and United States produced the highest number of most successful athletes.</p>
 
 
 
