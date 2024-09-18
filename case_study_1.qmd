@@ -6,14 +6,15 @@ author: Jack Kim
 date: September 18, 2024
 format: html
 execute:
-  echo: false
+  warning: false
+  message: false
 ---
 
 [TidyTuesday Reference](https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06)
 
 [Original Data Source](https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/)
 
-Objective: Let's find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). Which countries have produced the best talents?
+Objective: Usually it is the Olympic athletes that receive the fame. However, at the end of the day they each represent their country with pride. Let's find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). So, which countries have produced the best talents?
 
 ```{r}
 tuesdata <- tidytuesdayR::tt_load('2024-08-06')
@@ -41,6 +42,6 @@ top_nations <- top_athletes |>
 
 top_nations
 ```
-USSR and United States produced the highest number of most successful athletes.
+USSR and United States produced the highest number of most successful athletes. Russia (formerly USSR) and the US usually rank top 3 for medal counts. It is actually surprising to find China not represented in the list.
 
-
+As for most successful athletes, Michael Phelps is by far has won the most medals (28).
