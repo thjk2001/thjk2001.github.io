@@ -6,8 +6,3 @@ author: Jack Kim
 date: September 18, 2024
 format: html
 ---
-
-```{r}
-
-```
-
