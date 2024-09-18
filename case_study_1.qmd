@@ -10,6 +10,6 @@ execute:
 ---
 
 ```{r}
-
+tuesdata <- tidytuesdayR::tt_load('2024-08-06')
 ```
 
