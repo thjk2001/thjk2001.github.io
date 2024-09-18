@@ -25,24 +25,22 @@ olympics <- tuesdata$olympics
 library(tidyverse)
 
 top_athletes <- olympics |>
-  filter(!is.na(medal)) |> 
-  group_by(name, noc) |>  
-  summarise(total_medals = n()) |>  
-  arrange(desc(total_medals)) |>  
-  slice_max(total_medals, n = 10)  
+  filter(!is.na(medal)) |>
+  group_by(name, team) |>
+  summarise(total_medals = n()) |>
+  ungroup() |>
+  arrange(desc(total_medals)) |>
+  slice(1:10)
 
 top_athletes
 
 top_nations <- top_athletes |>
-  group_by(noc) |> 
-  summarise(count = n()) |> 
+  group_by(team) |>
+  summarise(count = n()) |>
   arrange(desc(count))
 
 top_nations
 ```
-The list provides athletes with the most medal counts. Same number of medal counts all included. Most successful athlete is Michael Phelps.
+USSR and United States produced the highest number of most successful athletes.
 
-```{r}
-
-```
 
