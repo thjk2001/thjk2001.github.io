@@ -1,7 +1,7 @@
 ---
-title: "Case Analysis 1: Big Tech Stock Prices"
+title: "Case Analysis 1: Olympics"
 description: |
-  Analysis of Super Mario Kart data from TidyTuesday
+  Nations that Produced the Most Talented Athletes
 author: Jack Kim
 date: September 18, 2024
 format: html
@@ -9,7 +9,40 @@ execute:
   echo: false
 ---
 
+TidyTuesday Reference: https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06
+
+Original Data Source: https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/
+
+Objective: Let's find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). Which countries have produced the best talents?
+
 ```{r}
 tuesdata <- tidytuesdayR::tt_load('2024-08-06')
+
+olympics <- tuesdata$olympics
+```
+
+```{r}
+library(tidyverse)
+
+top_athletes <- olympics |>
+  filter(!is.na(medal)) |> 
+  group_by(name, noc) |>  
+  summarise(total_medals = n()) |>  
+  arrange(desc(total_medals)) |>  
+  slice_max(total_medals, n = 10)  
+
+top_athletes
+
+top_nations <- top_athletes |>
+  group_by(noc) |> 
+  summarise(count = n()) |> 
+  arrange(desc(count))
+
+top_nations
+```
+The list provides athletes with the most medal counts. Same number of medal counts all included. Most successful athlete is Michael Phelps.
+
+```{r}
+
 ```
 
