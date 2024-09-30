@@ -16,6 +16,8 @@ website:
             text: Case 1
           - href: case_study_2.qmd
             text: Case 2
+          - href: netflix_study.qmd
+            text: Project 2
         
 format:
   html:

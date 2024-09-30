@@ -9,8 +9,8 @@ execute:
   echo: false
   warning: false
   message: false
-
 ---
+
 [TidyTuesday Reference](https://github.com/rfordatascience/tidytuesday/tree/master/data/2023/2023-04-04)
 
 [Original Data Source](https://www.kaggle.com/datasets/evangower/premier-league-match-data)
@@ -28,6 +28,7 @@ tuesdata <- tidytuesdayR::tt_load(2023, week = 14)
 soccer <- tuesdata$soccer
 
 ```
+
 ```{r}
 library(tidyverse)
 
@@ -62,4 +63,5 @@ ggplot(arsenal_yellow_by_referee, aes(x = reorder(Referee, -Total_Yellow_Cards),
     panel.grid.minor.y = element_blank()  
   )
 ```
+
 The bar chart represents the total number of yellow cards each referee has given to Arsenal. Craig Pawson handed out the most yellow cards to Arsenal, with 9 cards given.
