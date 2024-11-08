@@ -3,79 +3,114 @@ title: "Project 3: NYC Flights Analysis"
 description: |
   Morning vs. Evening Departure Delays
 author: Jack Kim
-date: September 18, 2024
+date: November 8, 2024
 format: html
-execute:
-  echo: false
+execute: 
   warning: false
   message: false
 ---
 
+**Are departure delays significantly different between morning and evening flights?**
+
+[Objective]
+In this analysis, I will investigate whether there is a significant difference in departure delays between morning and evening flights using data from the nycflights13 package. To do this, I will perform a permutation test, where I will shuffle the time-of-day labels (morning/evening) and repeatedly calculate the difference in mean departure delays. This will help simulate the null hypothesis, which assumes that the time of day has no effect on departure delays. By comparing the observed difference in delays to this simulated distribution, I will assess the statistical significance of the observed difference.
+
+[Null Hypothesis] Time of day (morning vs. evening) has no effect on departure delays.
 
 ```{r}
-library(tidyverse)
 library(nycflights13)
 library(dplyr)
-
+library(purrr)
+library(ggplot2)
 ```
 
-```{r}
-flights_time <- flights %>%
-  filter(!is.na(dep_delay)) %>%
-  mutate(hour = dep_time %/% 100,  # Extract hour from dep_time
-         time_of_day = case_when(
-           hour >= 5 & hour < 12 ~ "morning",
-           hour >= 17 & hour < 24 ~ "evening",
-           TRUE ~ NA_character_
-         )) %>%
-  filter(!is.na(time_of_day))  # Remove flights not in morning or evening
 
+```{r}
+flights <- nycflights13::flights |>
+  filter(!is.na(dep_delay)) |>
+  mutate(time_of_day = case_when(
+    hour >= 5 & hour < 11 ~ "morning",
+    hour >= 17 & hour < 23 ~ "evening",
+    TRUE ~ "other"
+  )) |>
+  filter(time_of_day != "other")  # Exclude flights that are not in the morning or evening
+
+head(flights, 10)
 ```
 
+We are using the nycflights13 data which contains the flight information in New York airports in 2013. Most importantly, the data shows the departure delay time (in minutes). We will first define morning and evening flights. Morning flights are flights departing between 5:00am and 11:00am. Evening flights are flights departing from 5:00pm and 11:00pm (ex. First row, dep_time 517 means departure time is at 5:17am). We removed the flights that are not within these time ranges.
+
+Below we have the average delayed time for morning and evening flights.
 ```{r}
-# Calculate the observed difference in mean delays
-observed_diff <- flights_time %>%
-  group_by(time_of_day) %>%
-  summarise(mean_delay = mean(dep_delay)) %>%
-  summarise(diff = diff(mean_delay)) %>%
+mean_delays <- flights |>
+  group_by(time_of_day) |>
+  summarize(mean_delay = mean(dep_delay, na.rm = TRUE))
+
+print(mean_delays)
+```
+
+Then we calculate the observed differences.
+
+```{r}
+obs_diff <- flights |>
+  group_by(time_of_day) |>
+  summarize(mean_delay = mean(dep_delay)) |>
+  summarize(diff = diff(mean_delay)) |>
   pull(diff)
 
-observed_diff
+obs_diff
+cat("Observed Difference in Mean Delays (Evening - Morning):", obs_diff, "minutes\n")
 
 ```
 
-```{r}
-set.seed(42)  # For reproducibility
 
-# Permutation test with 1000 iterations
-perm_test <- replicate(1000, {
-  shuffled <- flights_time %>%
-    mutate(shuffled_time = sample(time_of_day)) %>%
-    group_by(shuffled_time) %>%
-    summarise(mean_delay = mean(dep_delay)) %>%
-    summarise(diff = diff(mean_delay)) %>%
+[Permutation Test]
+We’ll shuffle the time labels (morning or evening) 1000 times and calculate the difference in mean delays for each permutation.
+
+```{r}
+set.seed(47)
+
+null_dist <- map_dbl(1:1000, ~ {
+  flights |> 
+    mutate(shuffled_time = sample(time_of_day)) |> 
+    group_by(shuffled_time) |> 
+    summarize(mean_delay = mean(dep_delay), .groups = "drop") |> 
+    summarize(diff = diff(mean_delay)) |> 
     pull(diff)
 })
 
-# Calculate the p-value
-p_value <- mean(abs(perm_test) >= abs(observed_diff))
-p_value
+head(null_dist, 10)
 
 ```
+
+
 
 ```{r}
-library(ggplot2)
-
-# Create a histogram of the permutation distribution
-perm_data <- data.frame(perm_diff = perm_test)
-
-ggplot(perm_data, aes(x = perm_diff)) +
-  geom_histogram(binwidth = 1, color = "black", fill = "blue", alpha = 0.7) +
-  geom_vline(xintercept = observed_diff, color = "red", linetype = "dashed") +
-  labs(title = "Permutation Test: Morning vs Evening Delays",
-       x = "Difference in Mean Delays",
-       y = "Frequency") +
-  theme_minimal()
+# Plot the null distribution with observed difference
+ggplot(data.frame(null_dist), aes(x = null_dist)) +
+  geom_histogram(binwidth = 0.5, fill = "lightblue", color = "black") +
+  geom_vline(xintercept = obs_diff, color = "red", linetype = "dashed") +
+  labs(
+    title = "Permutation Test: Morning vs Evening Delays",
+    x = "Difference in Mean Delays",
+    y = "Frequency"
+  )
 
 ```
 
+
+```{r}
+# Calculate p-value
+p_value <- mean(abs(null_dist) >= abs(obs_diff))
+cat("P-value:", p_value, "\n")
+```
+
+**Conclusion**
+
+The red dashed line represents the observed difference in mean delays between morning and evening flights. The histogram represents the differences in mean delays generated under the null hypothesis (shuffling the time labels).
+
+A p-value of 0 means that none of the 1000 permutations generated a difference in mean delays as extreme (or more extreme) as the observed difference. This indicates that the observed difference is highly unlikely to have occurred by chance if the null hypothesis were true.
+
+Since the p-value is 0, this provides strong evidence against the null hypothesis. You would reject the null hypothesis and conclude that the time of day (morning vs. evening) does have a significant effect on departure delays.
+
+The visualization supports this as the red line falls outside the range of the simulated null distribution values, highlighting that the observed difference is not consistent with the null hypothesis assumption.
