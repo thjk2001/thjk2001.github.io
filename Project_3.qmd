@@ -20,6 +20,62 @@ library(dplyr)
 ```
 
 ```{r}
+flights_time <- flights %>%
+  filter(!is.na(dep_delay)) %>%
+  mutate(hour = dep_time %/% 100,  # Extract hour from dep_time
+         time_of_day = case_when(
+           hour >= 5 & hour < 12 ~ "morning",
+           hour >= 17 & hour < 24 ~ "evening",
+           TRUE ~ NA_character_
+         )) %>%
+  filter(!is.na(time_of_day))  # Remove flights not in morning or evening
+
+```
+
+```{r}
+# Calculate the observed difference in mean delays
+observed_diff <- flights_time %>%
+  group_by(time_of_day) %>%
+  summarise(mean_delay = mean(dep_delay)) %>%
+  summarise(diff = diff(mean_delay)) %>%
+  pull(diff)
+
+observed_diff
+
+```
+
+```{r}
+set.seed(42)  # For reproducibility
+
+# Permutation test with 1000 iterations
+perm_test <- replicate(1000, {
+  shuffled <- flights_time %>%
+    mutate(shuffled_time = sample(time_of_day)) %>%
+    group_by(shuffled_time) %>%
+    summarise(mean_delay = mean(dep_delay)) %>%
+    summarise(diff = diff(mean_delay)) %>%
+    pull(diff)
+})
+
+# Calculate the p-value
+p_value <- mean(abs(perm_test) >= abs(observed_diff))
+p_value
+
+```
+
+```{r}
+library(ggplot2)
+
+# Create a histogram of the permutation distribution
+perm_data <- data.frame(perm_diff = perm_test)
+
+ggplot(perm_data, aes(x = perm_diff)) +
+  geom_histogram(binwidth = 1, color = "black", fill = "blue", alpha = 0.7) +
+  geom_vline(xintercept = observed_diff, color = "red", linetype = "dashed") +
+  labs(title = "Permutation Test: Morning vs Evening Delays",
+       x = "Difference in Mean Delays",
+       y = "Frequency") +
+  theme_minimal()
 
 ```
 
