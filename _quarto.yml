@@ -22,7 +22,7 @@ website:
         menu:
           - href: Project_2.qmd
             text: Project 2
-          - href: Project 3.qmd
+          - href: Project_3.qmd
             text: Project 3
         
 format:

@@ -1,0 +1,146 @@
+---
+title: "Project_2"
+author: "Taehwan (Jack) Kim"
+format: pdf
+execute: 
+  warning: false
+  message: false
+---
+[TidyTuesday Reference](https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-04-20/readme.md)
+
+[Original Data Source](https://www.kaggle.com/datasets/shivamb/netflix-shows)
+
+This dataset consists of tv shows and movies available on Netflix as of 2019. The dataset is collected from Flixable which is a third-party Netflix search engine.
+
+In 2018, they released an interesting report which shows that the number of TV shows on Netflix has nearly tripled since 2010. The streaming service's number of movies has decreased by more than 2,000 titles since 2010, while its number of TV shows has nearly tripled. It will be interesting to explore what all other insights can be obtained from the same dataset.
+
+Integrating this dataset with other external datasets such as IMDB ratings, rotten tomatoes can also provide many interesting findings.
+
+
+```{r}
+# Get the Data
+
+# Read in with tidytuesdayR package 
+# Install from CRAN via: install.packages("tidytuesdayR")
+# This loads the readme and all the datasets for the week of interest
+
+# Either ISO-8601 date or year/week works!
+
+tuesdata <- tidytuesdayR::tt_load('2021-04-20')
+tuesdata <- tidytuesdayR::tt_load(2021, week = 17)
+
+netflix <- tuesdata$netflix
+
+library(tidyverse)
+
+```
+1. Who are the actors with the most movie appearances? Let's find the top 5 actors by the number of appearances.
+
+```{r}
+actor_count <- netflix |>
+  filter(type == "Movie", !is.na(cast)) |> 
+  separate_rows(cast, sep = ",\\s*") |> 
+  count(cast, sort = TRUE)
+
+top_5_actors <- actor_count |>
+  slice_head(n = 5) 
+
+
+ggplot(top_5_actors, aes(x = reorder(cast, n), y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +  
+  labs(
+    title = "Top 5 Actors Appearing in Netflix Titles",
+    x = "Actor",
+    y = "Number of Appearances"
+  ) +
+  theme_minimal() 
+
+```
+Interesting, I actually do not know any of these actors/actresses. Upon some research, I have found that all of them are Indian actors/actresses.
+
+Just out of curiosity, let's find out which countries produced the most number of movies?
+
+```{r}
+
+country_count_movies <- netflix |>
+  filter(type == "Movie", !is.na(country)) |>  
+  separate_rows(country, sep = ",\\s*") |>  
+  count(country, sort = TRUE)  
+
+top_5_countries <- country_count_movies |>
+  slice_head(n = 5)  
+
+
+ggplot(top_5_countries, aes(x = reorder(country, n), y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  coord_flip() +  
+  labs(
+    title = "Top 5 Countries Producing the Most Netflix Movies",
+    x = "Country",
+    y = "Number of Movies"
+  ) +
+  theme_minimal()
+
+```
+Unsurprisingly, the US has produced the most Netflix movies.This makes sense given that Hollywood is the global hub of film production. With the growing size of Bollywood, India comes in for second place.
+
+2. Most popular words in movie titles:
+
+We have excluded articles, pronouns, prepositions and any common stop words.
+
+```{r}
+# A list of words we want to exclude
+stop_words <- c("a", "an", "the", "and", "in", "on", "of", "with", "for", "to", "he", "she", "my", "it", "him", "her", "above", "below", "top", "bottom", "between", "front", "back", "beneath", "they", "me", "you", "them", "us", "we", "that", "this", "these", "those", "I", "from", "i", "at", "")
+
+word_count <- netflix |>
+  filter(type == "Movie", !is.na(title)) |>
+  mutate(clean_title = str_remove_all(title, "[^A-Za-z\\s]")) |>
+  mutate(clean_title = str_to_lower(clean_title)) |>
+  separate_rows(clean_title, sep = "\\s+") |> 
+  filter(!clean_title %in% stop_words) |> 
+  count(clean_title, sort = TRUE) 
+
+head(word_count, 10)
+
+```
+Love and Christmas are the top two most common words. These results do makes sense as these are pretty popular topics.
+
+3. The most commercially successful filmmaker in the history of Hollywood is Steven Spielburg. Let's figure out which of his movies are on Netflix.
+
+```{r}
+spielberg_movies <- netflix |>
+  filter(type == "Movie", str_detect(director, "Steven Spielberg"))
+
+head(spielberg_movies$title)
+```
+Surprising, only 6 are available on Netflix. Given sheer amount of Spielberg movies we know of, this a very small number.
+
+4. Following Covid-19, less people are going to the movies. At the same time over-the-top streaming services have become more influential. Nowadays, people are wondering "when is my favorite movie going to be on Netflix?". So let's find out, on average, how long does it take for a movie to be added on Netflix.
+
+Two caveats:
+- We have exact dates for the when the movie was added, but only the year data is available for when it was released. Hence, we will just find the number of years.
+- Netflix started streaming services in 2007. Any movie produced before 2007 will be excluded because that just automatically increases the average.
+
+```{r}
+netflix <- netflix |>
+  mutate(
+    date_added = mdy(date_added),  
+    release_year = as.numeric(release_year)  
+  )
+
+netflix <- netflix |>
+  mutate(added_year = year(date_added))  
+
+netflix <- netflix |>
+  mutate(time_diff_years = added_year - release_year)  
+
+netflix_era <- netflix |>
+  filter(!is.na(time_diff_years) & time_diff_years >= 0 & release_year >= 2007) 
+
+average_time_diff <- netflix_era |>
+  summarize(average_diff = mean(time_diff_years, na.rm = TRUE))
+
+average_time_diff
+```
+On average, it takes 2.14 years for a movie to be added on Netflix after being released in the theaters.
