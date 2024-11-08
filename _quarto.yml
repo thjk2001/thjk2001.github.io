@@ -18,6 +18,8 @@ website:
             text: Case 2
           - href: netflix_study.qmd
             text: Project 2
+          - href: Project 3.qmd
+            text: Project 3
         
 format:
   html:
