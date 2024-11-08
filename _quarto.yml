@@ -18,10 +18,8 @@ website:
             text: Case 2
           - href: case_study_3.qmd
             text: Case 3
-      - text: Projects
+      - text: Mini Projects
         menu:
-          - href: Project_2.qmd
-            text: Project 2
           - href: Project_3.qmd
             text: Project 3
         
