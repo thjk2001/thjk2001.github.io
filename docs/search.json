@@ -1,26 +1,5 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "Taehwan (Jack) Kim | 김태환",
-    "section": "",
-    "text": "Hello World."
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Taehwan (Jack) Kim",
-    "section": "",
-    "text": "Greetings! I’m Jack. Junior and Economics major at Pomona College. Formerly of Class of 2024, finally back at school after serving in the Republic of Korea Army Special Forces. My interest lies in the world of finance and value investing. Love to play soccer (lifelong Arsenal fan) and love to share my military endeavors."
-  },
-  {
-    "objectID": "case_study_2.html",
-    "href": "case_study_2.html",
-    "title": "Case Analysis 2: Premier League 2021-2022",
-    "section": "",
-    "text": "TidyTuesday Reference\nOriginal Data Source\nObjective of the Analysis: Which referee gave out the most yellow cards to Arsenal during the 2021-2022 season?\nRefereeing decisions play huge outcome in a football match. In fact, fans and analysts alike do pay enormous attention to the designated referee for each fixture. As a lifelong Arsenal fan, I wanted to find out which referees tend to be harsher on Arsenal.\n\n\n\n\n\n\n\n\n\nThe bar chart represents the total number of yellow cards each referee has given to Arsenal. Craig Pawson handed out the most yellow cards to Arsenal, with 9 cards given."
-  },
-  {
     "objectID": "case_study_1.html",
     "href": "case_study_1.html",
     "title": "Case Analysis 1: Olympics",
@@ -35,6 +14,13 @@
     "text": "TidyTuesday Reference\nOriginal Data Source\nThis dataset consists of tv shows and movies available on Netflix as of 2019. The dataset is collected from Flixable which is a third-party Netflix search engine.\nIn 2018, they released an interesting report which shows that the number of TV shows on Netflix has nearly tripled since 2010. The streaming service’s number of movies has decreased by more than 2,000 titles since 2010, while its number of TV shows has nearly tripled. It will be interesting to explore what all other insights can be obtained from the same dataset.\nIntegrating this dataset with other external datasets such as IMDB ratings, rotten tomatoes can also provide many interesting findings.\n\n# Get the Data\n\n# Read in with tidytuesdayR package \n# Install from CRAN via: install.packages(\"tidytuesdayR\")\n# This loads the readme and all the datasets for the week of interest\n\n# Either ISO-8601 date or year/week works!\n\ntuesdata &lt;- tidytuesdayR::tt_load('2021-04-20')\ntuesdata &lt;- tidytuesdayR::tt_load(2021, week = 17)\n\nnetflix &lt;- tuesdata$netflix\n\nlibrary(tidyverse)\n\n\nWho are the actors with the most movie appearances? Let’s find the top 5 actors by the number of appearances.\n\n\nactor_count &lt;- netflix |&gt;\n  filter(type == \"Movie\", !is.na(cast)) |&gt; \n  separate_rows(cast, sep = \",\\\\s*\") |&gt; \n  count(cast, sort = TRUE)\n\ntop_5_actors &lt;- actor_count |&gt;\n  slice_head(n = 5) \n\n\nggplot(top_5_actors, aes(x = reorder(cast, n), y = n)) +\n  geom_bar(stat = \"identity\", fill = \"steelblue\") +\n  coord_flip() +  \n  labs(\n    title = \"Top 5 Actors Appearing in Netflix Titles\",\n    x = \"Actor\",\n    y = \"Number of Appearances\"\n  ) +\n  theme_minimal() \n\n\n\n\n\n\n\n\nInteresting, I actually do not know any of these actors/actresses. Upon some research, I have found that all of them are Indian actors/actresses.\nJust out of curiosity, let’s find out which countries produced the most number of movies?\n\ncountry_count_movies &lt;- netflix |&gt;\n  filter(type == \"Movie\", !is.na(country)) |&gt;  \n  separate_rows(country, sep = \",\\\\s*\") |&gt;  \n  count(country, sort = TRUE)  \n\ntop_5_countries &lt;- country_count_movies |&gt;\n  slice_head(n = 5)  \n\n\nggplot(top_5_countries, aes(x = reorder(country, n), y = n)) +\n  geom_bar(stat = \"identity\", fill = \"steelblue\") +\n  coord_flip() +  \n  labs(\n    title = \"Top 5 Countries Producing the Most Netflix Movies\",\n    x = \"Country\",\n    y = \"Number of Movies\"\n  ) +\n  theme_minimal()\n\n\n\n\n\n\n\n\nUnsurprisingly, the US has produced the most Netflix movies.This makes sense given that Hollywood is the global hub of film production. With the growing size of Bollywood, India comes in for second place.\n\nMost popular words in movie titles:\n\nWe have excluded articles, pronouns, prepositions and any common stop words.\n\n# A list of words we want to exclude\nstop_words &lt;- c(\"a\", \"an\", \"the\", \"and\", \"in\", \"on\", \"of\", \"with\", \"for\", \"to\", \"he\", \"she\", \"my\", \"it\", \"him\", \"her\", \"above\", \"below\", \"top\", \"bottom\", \"between\", \"front\", \"back\", \"beneath\", \"they\", \"me\", \"you\", \"them\", \"us\", \"we\", \"that\", \"this\", \"these\", \"those\", \"I\", \"from\", \"i\", \"at\", \"\")\n\nword_count &lt;- netflix |&gt;\n  filter(type == \"Movie\", !is.na(title)) |&gt;\n  mutate(clean_title = str_remove_all(title, \"[^A-Za-z\\\\s]\")) |&gt;\n  mutate(clean_title = str_to_lower(clean_title)) |&gt;\n  separate_rows(clean_title, sep = \"\\\\s+\") |&gt; \n  filter(!clean_title %in% stop_words) |&gt; \n  count(clean_title, sort = TRUE) \n\nhead(word_count, 10)\n\n# A tibble: 10 × 2\n   clean_title     n\n   &lt;chr&gt;       &lt;int&gt;\n 1 love           91\n 2 christmas      72\n 3 movie          60\n 4 man            58\n 5 story          54\n 6 life           44\n 7 world          42\n 8 little         39\n 9 live           38\n10 one            38\n\n\nLove and Christmas are the top two most common words. These results do makes sense as these are pretty popular topics.\n\nThe most commercially successful filmmaker in the history of Hollywood is Steven Spielburg. Let’s figure out which of his movies are on Netflix.\n\n\nspielberg_movies &lt;- netflix |&gt;\n  filter(type == \"Movie\", str_detect(director, \"Steven Spielberg\"))\n\nhead(spielberg_movies$title)\n\n[1] \"Catch Me If You Can\"                               \n[2] \"Hook\"                                              \n[3] \"Indiana Jones and the Kingdom of the Crystal Skull\"\n[4] \"Indiana Jones and the Last Crusade\"                \n[5] \"Indiana Jones and the Raiders of the Lost Ark\"     \n[6] \"Indiana Jones and the Temple of Doom\"              \n\n\nSurprising, only 6 are available on Netflix. Given sheer amount of Spielberg movies we know of, this a very small number.\n\nFollowing Covid-19, less people are going to the movies. At the same time over-the-top streaming services have become more influential. Nowadays, people are wondering “when is my favorite movie going to be on Netflix?”. So let’s find out, on average, how long does it take for a movie to be added on Netflix.\n\nTwo caveats: - We have exact dates for the when the movie was added, but only the year data is available for when it was released. Hence, we will just find the number of years. - Netflix started streaming services in 2007. Any movie produced before 2007 will be excluded because that just automatically increases the average.\n\nnetflix &lt;- netflix |&gt;\n  mutate(\n    date_added = mdy(date_added),  \n    release_year = as.numeric(release_year)  \n  )\n\nnetflix &lt;- netflix |&gt;\n  mutate(added_year = year(date_added))  \n\nnetflix &lt;- netflix |&gt;\n  mutate(time_diff_years = added_year - release_year)  \n\nnetflix_era &lt;- netflix |&gt;\n  filter(!is.na(time_diff_years) & time_diff_years &gt;= 0 & release_year &gt;= 2007) \n\naverage_time_diff &lt;- netflix_era |&gt;\n  summarize(average_diff = mean(time_diff_years, na.rm = TRUE))\n\naverage_time_diff\n\n# A tibble: 1 × 1\n  average_diff\n         &lt;dbl&gt;\n1         2.14\n\n\nOn average, it takes 2.14 years for a movie to be added on Netflix after being released in the theaters."
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Taehwan (Jack) Kim",
+    "section": "",
+    "text": "Greetings! I’m Jack. Junior and Economics major at Pomona College. Formerly of Class of 2024, finally back at school after serving in the Republic of Korea Army Special Forces. My interest lies in the world of finance and value investing. Love to play soccer (lifelong Arsenal fan) and love to share my military endeavors."
+  },
+  {
     "objectID": "Project_2.html",
     "href": "Project_2.html",
     "title": "Project_2",
@@ -47,5 +33,12 @@
     "title": "Project 3: NYC Flights Analysis",
     "section": "",
     "text": "[1] -26.00005\n\n\n\n\n[1] 0"
+  },
+  {
+    "objectID": "case_study_2.html",
+    "href": "case_study_2.html",
+    "title": "Case Analysis 2: Premier League 2021-2022",
+    "section": "",
+    "text": "TidyTuesday Reference\nOriginal Data Source\nObjective of the Analysis: Which referee gave out the most yellow cards to Arsenal during the 2021-2022 season?\nRefereeing decisions play huge outcome in a football match. In fact, fans and analysts alike do pay enormous attention to the designated referee for each fixture. As a lifelong Arsenal fan, I wanted to find out which referees tend to be harsher on Arsenal.\n\n\n\n\n\n\n\n\n\nThe bar chart represents the total number of yellow cards each referee has given to Arsenal. Craig Pawson handed out the most yellow cards to Arsenal, with 9 cards given."
   }
 ]
