@@ -1,0 +1,25 @@
+---
+title: "Project 3: NYC Flights Analysis"
+description: |
+  Morning vs. Evening Departure Delays
+author: Jack Kim
+date: September 18, 2024
+format: html
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+library(dplyr)
+
+```
+
+```{r}
+
+```
+
