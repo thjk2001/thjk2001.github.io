@@ -16,7 +16,11 @@ website:
             text: Case 1
           - href: case_study_2.qmd
             text: Case 2
-          - href: netflix_study.qmd
+          - href: case_study_3.qmd
+            text: Case 3
+      - href: Projects
+        menu:
+          - href: Project_2.qmd
             text: Project 2
           - href: Project 3.qmd
             text: Project 3
