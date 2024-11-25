@@ -22,6 +22,8 @@ website:
         menu:
           - href: Project_3.qmd
             text: Project 3
+          - href: Project_4.qmd
+            text: Project 4
         
 format:
   html:
