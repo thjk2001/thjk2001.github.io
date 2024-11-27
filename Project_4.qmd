@@ -10,21 +10,176 @@ execute:
   message: false
 ---
 
+**Wideband acoustic immittance (WAI) Analysis**
+
+[Original Data Source](https://www.science.smith.edu/wai-database/)
+
+Background: The WAI database is a comprehensive online database for normative adult WAI measurements. This database is designed to facilitate data sharing and analysis among researchers in the field of audiology. As of July 1, 2019, the database encompasses measurements from 12 peer-reviewed studies, totaling 640 subjects and 914 normal middle ears. This results in 286,774 data points across various frequencies. The establishment of this WAI database represents a significant advancement in audiological research, offering a centralized resource for normative data and promoting collaborative efforts in the study of middle-ear pathologies.
+
+
+The objective is to recreate Figure 1, which represents mean absorbance data from select 12 publications in the Wideband Acoustic Immittance (WAI) database, showing how absorbance varies with frequency across different studies.
+
+
+Starter Code to establish connection to the WAI database.
 ```{r}
 library(DBI)
-library(RSQLite)
 library(RMariaDB)
+library(dplyr)
+library(ggplot2)
+
 con_wai <- dbConnect(
-  MariaDB(), host = "scidb.smith.edu",
-  user = "waiuser", password = "smith_waiDB", 
+  MariaDB(),
+  host = "scidb.smith.edu",
+  user = "waiuser",
+  password = "smith_waiDB",
   dbname = "wai"
 )
+
 Measurements <- tbl(con_wai, "Measurements")
 PI_Info <- tbl(con_wai, "PI_Info")
 Subjects <- tbl(con_wai, "Subjects")
 
-# collect(Measurements)
+```
+This SQL code below is for processing and aggregating data from the WAI database. More specifically, this combines data from two tables, Measurements and PI_Info, to calculate and aggregate absorbance values for specific studies and prepare data for visualization.
+
+We are:
+1. Calculate Mean Absorbance: for each unique combination of study, instrument, frequency, and year.
+2. Generates Legend Labels: constructs a label for visualization
+3. Filters Data: restricts the query to 12 specific studies of interest.
+4. Groups Data: organizes results by study, frequency, instrument, and year.
+
+```{sql, connection=con_wai, output.var="data"}
+
+SELECT 
+    Measurements.Identifier, 
+    PI_Info.AuthorsShortList, 
+    Measurements.Instrument, 
+    Measurements.Frequency, 
+    AVG(Measurements.Absorbance) AS MeanAbsorbance, 
+    CONCAT(
+        PI_Info.AuthorsShortList, ' (', PI_Info.Year, ') N=',
+        COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear))
+    ) AS Legend_Label
+FROM Measurements
+JOIN PI_Info 
+    ON Measurements.Identifier = PI_Info.Identifier
+WHERE Measurements.Identifier IN (
+    'Abur_2014', 'Feeney_2017', 'Groon_2015', 'Lewis_2015', 
+    'Liu_2008', 'Rosowski_2012', 'Shahnaz_2006', 'Shaver_2013', 
+    'Sun_2016', 'Voss_1994', 'Voss_2010', 'Werner_2010'
+)
+GROUP BY 
+    Measurements.Identifier, 
+    Measurements.Instrument, 
+    PI_Info.AuthorsShortList, 
+    Measurements.Frequency, 
+    PI_Info.Year;
+
+
 ```
 
 
+
+Data Visualization:
+```{r, fig.height=8, fig.width=8}
+
+
+data$Frequency <- as.numeric(data$Frequency)
+
+
+data <- data %>%
+  filter(Frequency >= 200)
+
+# Create the plot
+ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = Legend_Label)) +
+  geom_line(size = 0.8) +
+  labs(
+    title = "Mean absorbance from publications in WAI database",
+    x = "Frequency (Hz)",
+    y = "Mean Absorbance"
+  ) +
+  theme_minimal() +
+  scale_x_continuous(
+    trans = "log10",
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000),
+    labels = c("200", "400", "600", "800", "1000", "2000", "4000", "6000", "8000"),
+    limits = c(200, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = c(0, 0)
+  )
+
+
+```
+
+Above is the a replicate of Figure 1. Y-axis (Mean Absorbance) represents the average proportion of sound energy absorbed by the middle ear at various frequencies. Higher values indicate greater absorption, while lower values suggest more reflection. X-axis (Frequency in Hz) represents the sound frequency (logarithmic scale) ranging from 200 Hz to 8000 Hz.
+
+Each line corresponds to a specific study in the WAI database, identified by the first author's name, publication year, and the number of participants.
+
+In essence, the graph provides a comparative view of absorbance data from multiple studies. It highlights similarities and differences in how different populations and systems respond to sound frequencies.
+
+Most studies show increasing absorbance from 200 Hz to approximately 1000-2000 Hz, peaking, and then gradually decreasing at higher frequencies. Variability in the data such as differences in peak values and slopes likely reflects variations in study populations, equipment, or methodologies.
+
+
+
+**Deeper Dive into Feeney et al. (2017)**
+
+I decided to choose the most recent study among the 12 selected publications, which was Feeney et al. (2017). This contains various grouping variables such as age, sex, and race/ethnicity. I chose Sex as the grouping variable because it is a common demographic factor in audiological studies and is likely to show differences in middle-ear characteristics.
+
+The below SQL query takes on a similar process as that of recreating Figure 1. In this case, the Identifier would be the Feeney_2017, instead of all the 12 studies.
+
+```{sql, connection=con_wai, output.var="data"}
+
+SELECT 
+    Measurements.Frequency, 
+    Subjects.Sex,
+    AVG(Measurements.Absorbance) AS MeanAbsorbance
+FROM Measurements
+JOIN Subjects
+    ON Measurements.SubjectNumber = Subjects.SubjectNumber
+WHERE Measurements.Identifier = 'Feeney_2017'
+GROUP BY 
+    Measurements.Frequency, 
+    Subjects.Sex
+ORDER BY Measurements.Frequency;
+
+
+```
+
+
+Data Visualization:
+
+I maintained a similar format for the x and y axis. The X-axis represents frequency (logarithmic scale), the Y-axis shows mean absorbance, and lines differentiate groups by sex (Male, Female, Unknown).
+
+```{r}
+data$Frequency <- as.numeric(data$Frequency)
+
+ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = Sex)) +
+  geom_line(size = 0.8) +
+  labs(
+    title = "Mean Absorbance by Sex Across Frequencies (Feeney et al., 2017)",
+    x = "Frequency (Hz)",
+    y = "Mean Absorbance"
+  ) +
+  theme_minimal() +
+  scale_x_continuous(
+    trans = "log10",
+    breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000),
+    labels = c("200", "400", "600", "800", "1000", "2000", "4000", "6000", "8000"),
+    limits = c(200, 8000)
+  ) +
+  scale_y_continuous(
+    limits = c(0, 1),
+    expand = c(0, 0)
+  )
+
+```
+
+This graph illustrates how middle-ear absorbance varies across frequencies for male, female, and unknown sex groups in the Feeney et al. (2017) study. While the general trend of absorbance is consistent across groups, slight variations at the extremes of the frequency range (low and high) may warrant further exploration. The similarity across sexes suggests that sex is not a significant factor influencing WAI in this study.
+
+Some key observations:
+1. Absorbance increases as frequency rises from 200 Hz to around 1000-2000 Hz, peaks, and then decreases for higher frequencies. All groups show peak absorbance in the range of 1000-4000 Hz, a typical finding in WAI studies, as this range represents optimal middle-ear energy absorption.
+2. The absorbance patterns for male and female groups are very similar across frequencies, suggesting that sex may have minimal impact on WAI results in this study. The "Unknown" group also follows a similar trajectory, possibly due to overlapping populations.
+3. Slight differences can be seen at lower frequencies (200-400 Hz) and higher frequencies (>6000 Hz), but these differences are marginal.
 
