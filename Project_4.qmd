@@ -183,3 +183,10 @@ Some key observations:
 2. The absorbance patterns for male and female groups are very similar across frequencies, suggesting that sex may have minimal impact on WAI results in this study. The "Unknown" group also follows a similar trajectory, possibly due to overlapping populations.
 3. Slight differences can be seen at lower frequencies (200-400 Hz) and higher frequencies (>6000 Hz), but these differences are marginal.
 
+
+
+Best practice purposes...
+```{r}
+dbDisconnect(con_wai)
+```
+
