@@ -6,7 +6,6 @@ author: Jack Kim
 date: September 18, 2024
 format: html
 execute:
-  echo: false
   warning: false
   message: false
 ---
@@ -27,6 +26,28 @@ tuesdata <- tidytuesdayR::tt_load('2024-08-06')
 olympics <- tuesdata$olympics
 ```
 
+**Original Data**
+
+```{r}
+library(DT)
+
+# Display the first 5 rows as an interactive table
+datatable(
+  olympics[1:5, ],  # Select the first 5 rows
+  options = list(
+    pageLength = 5,      # Show 5 rows
+    scrollX = TRUE,      # Enable horizontal scrolling
+    dom = 't',           # Show only the table (no search box, etc.)
+    autoWidth = TRUE     # Adjust column width automatically
+  ),
+  caption = "First 5 Rows of the Olympics Dataset"
+)
+
+```
+
+Above is a sample table showing the first 5 rows of Olympics dataset. This data includes all athletes who participated in past Olympics. Team represents the country each athlete represented and the variable "noc" represents the three-letter abbreviation. Some columns do have missing variable. For example, some athletes may have missing data on their height and weight. If the medal column is missing, it means that the player did not win a medal during his/her participation of that particular event. If a player did win a medal, it will be indicated as Bronze, Silver or Gold.
+
+
 ```{r}
 library(tidyverse)
 library(knitr)
@@ -41,7 +62,7 @@ olympics <- olympics |>
 
 #Obtaining best athletes
 top_athletes <- olympics |>
-  filter(!is.na(medal)) |>
+  filter(!is.na(medal)) |>  # first filters for those only with medals
   group_by(name, team) |>
   summarise(total_medals = n(), .groups = "drop") |>
   arrange(desc(total_medals)) |>
@@ -59,7 +80,7 @@ top_athletes |>
     full_width = FALSE
   )
 
-
+# Filter by nations for the top athletes
 top_nations <- top_athletes |>
   group_by(team) |>
   summarise(count = n(), .groups = "drop") |>

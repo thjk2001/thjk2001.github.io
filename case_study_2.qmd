@@ -6,7 +6,6 @@ author: Jack Kim
 date: September 18, 2024
 format: html
 execute:
-  echo: false
   warning: false
   message: false
 ---
@@ -19,9 +18,9 @@ execute:
 
 **Objective:** Which referees gave out the most yellow cards to Arsenal during the 2021-2022 season?
 
+
 The dataset includes teams, referee, and stats by home and away side such as fouls, shots, cards, and many more. This dataset was compiled from the official Premier League website for the 2021-2022 season. This data was scrapped by Evan Gower.
 
-Refereeing decisions play huge outcome in a football match. In fact, fans and analysts alike do pay enormous attention to the designated referee for each fixture. As a lifelong Arsenal fan, I wanted to find out which referees tend to be harsher on Arsenal.
 
 ```{r}
 library(tidytuesdayR)
@@ -32,6 +31,47 @@ tuesdata <- tidytuesdayR::tt_load(2023, week = 14)
 soccer <- tuesdata$soccer
 
 ```
+**Original Data**
+
+```{r}
+library(DT)
+
+# Display the first 5 rows of the soccer dataset
+datatable(
+  soccer[1:5, ],  # Select the first 5 rows
+  options = list(
+    pageLength = 5,      # Show 5 rows
+    scrollX = TRUE,      # Enable horizontal scrolling
+    dom = 't',           # Show only the table without search box, etc.
+    autoWidth = TRUE     # Adjust column widths automatically
+  ),
+  caption = "First 5 Rows of the Soccer Dataset"
+)
+
+```
+
+The above sample table shows the first five rows of the original dataset. Each row represents a unique matchday for a given team. Descriptions of some key variables are the following:
+
++ FTHG: full time home team goals
++ FTAG: full time away team goals
++ FTR: results showing which team won
++ Half-time results are denoted by HTHG, HTAG, HTR
++ HS: Number of shots taken by the home team
++ AS: Number of shots taken by the away team
++ HST: Number of shots on target by the home team
++ AST: Number of shots on target by the away team
++ HF: Number of fouls by the home team
++ AF: Number of fouls by the away team
++ HC: Number of corners taken by the home team
++ AC: Number of corners taken by the away team
++ HY: Number of yellow cards received by the home team
++ AY: Number of yellow cards received by the away team
++ HR: Number of red cards received by the home team
++ AR: Number of red cards received by the away team
+
+
+
+Refereeing decisions play huge outcome in a football match. In fact, fans and analysts alike do pay enormous attention to the designated referee for each fixture. As a lifelong Arsenal fan, I wanted to find out which referees tend to be harsher on Arsenal. More specifically, we focus on yellow cards. While a red card means that a player is ejected from the match, these instances tend to be more clear-cut decisions. Yellow card decisions offer a better insight into the deeper nuances of refereeing decisions or potential biases toward/against teams since yellow cards are given to less aggressive actions.
 
 ```{r}
 library(tidyverse)

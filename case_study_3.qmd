@@ -35,6 +35,42 @@ library(tidyverse)
 
 ```
 
+**Original Data**
+
+```{r}
+library(DT)
+
+# Display the first 5 rows of the netflix dataset
+datatable(
+  netflix[1:5, ],  # Select the first 5 rows
+  options = list(
+    pageLength = 5,      # Show 5 rows
+    scrollX = TRUE,      # Enable horizontal scrolling
+    dom = 't',           # Show only the table without search box, etc.
+    autoWidth = TRUE     # Adjust column widths automatically
+  ),
+  caption = "First 5 Rows of the Netflix Dataset"
+)
+
+```
+
+The above sample table shows the first five rows of the original data. Descriptions of the variables are the following:
+
++ show_id: Unique ID for every Movie / Tv Show
++ type: Identifier - A Movie or TV Show
++ title: Title of the Movie / Tv Show
++ director: Director of the Movie/Show
++ cast: Actors involved in the movie / show
++ country: Country where the movie / show was produced
++ date_added: Date it was added on Netflix
++ release_year: Actual Release year of the movie / show
++ rating: TV Rating of the movie / show
++ duration: Total Duration - in minutes or number of seasons
++ listed_in: Genre
++ description: Summary description of the film/show
+
+
+
 ### 1.  Who are the actors with the most movie appearances? Let's find the top 5 actors by the number of appearances.
 
 ```{r}
