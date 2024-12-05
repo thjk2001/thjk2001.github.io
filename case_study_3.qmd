@@ -25,13 +25,6 @@ In 2018, Flixable released an interesting report which shows that the number of 
 Integrating this dataset with other external datasets such as IMDB ratings, rotten tomatoes can also provide many interesting findings.
 
 ```{r}
-# Get the Data
-
-# Read in with tidytuesdayR package 
-# Install from CRAN via: install.packages("tidytuesdayR")
-# This loads the readme and all the datasets for the week of interest
-
-# Either ISO-8601 date or year/week works!
 
 tuesdata <- tidytuesdayR::tt_load('2021-04-20')
 tuesdata <- tidytuesdayR::tt_load(2021, week = 17)
@@ -102,40 +95,47 @@ We have excluded articles, pronouns, prepositions and any common stop words.
 ```{r}
 library(knitr)
 library(kableExtra)
+library(stringr)
 
 # A list of words we want to exclude
-stop_words <- c("a", "an", "the", "and", "in"
-                , "on", "of", "with", "for", "to"
-                , "he", "she", "my", "it", "him"
-                , "her", "above", "below", "top"
-                , "bottom", "between", "front", "back"
-                , "beneath", "they", "me", "you", "them"
-                , "us", "we", "that", "this", "these"
-                , "those", "I", "from", "i", "at", "")
+stop_words <- c("a", "an", "the", "and", "in",
+                "on", "of", "with", "for", "to",
+                "he", "she", "my", "it", "him",
+                "her", "above", "below", "top",
+                "bottom", "between", "front", "back",
+                "beneath", "they", "me", "you", "them",
+                "us", "we", "that", "this", "these",
+                "those", "I", "from", "i", "at", "")
 
+# Step 1: Filter and preprocess the titles
 word_count <- netflix |>
-  filter(type == "Movie", !is.na(title)) |>
-  mutate(clean_title = str_remove_all(title, "[^A-Za-z\\s]")) |>
-  mutate(clean_title = str_to_lower(clean_title)) |>
-  separate_rows(clean_title, sep = "\\s+") |> 
-  filter(!clean_title %in% stop_words) |> 
-  count(clean_title, sort = TRUE) 
+  subset(type == "Movie" & !is.na(title)) |>
+  transform(clean_title = str_remove_all(title, "[^A-Za-z\\s]")) |>
+  transform(clean_title = tolower(clean_title)) |>
+  {\(df) data.frame(clean_title = unlist(strsplit(df$clean_title, "\\s+")))}() |>
+  subset(!clean_title %in% stop_words) |>
+  table() |>
+  as.data.frame()
 
-word_count %>%
-  head(10) %>%
+# Step 2: Sort and rename columns
+word_count <- word_count[order(-word_count$Freq), ]
+colnames(word_count) <- c("Word", "Frequency")
+
+# Step 3: Display top 10 words as a formatted table
+word_count |>
+  head(10) |>
   kable(
     caption = "<strong style='color:black; font-size:16px;'>Top 10 Most Frequent Words in Netflix Movie Titles</strong>",
     col.names = c("Word", "Frequency"),
+    row.names = FALSE,  # Suppress row numbers
     align = c("l", "c"),
     escape = FALSE
-  ) %>%
+  ) |>
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed"),
     full_width = FALSE,
     position = "center"
   )
-
-
 
 ```
 
@@ -150,15 +150,15 @@ The most commercially successful filmmaker in the history of Hollywood is Steven
 spielberg_movies <- netflix |>
   filter(type == "Movie", str_detect(director, "Steven Spielberg"))
 
-spielberg_movies %>%
-  select(title) %>%  # Select only the title column
-  rename("Title" = title) %>%  # Rename the column for clarity
+spielberg_movies |>
+  select(title) |>  # Select only the title column
+  rename("Title" = title) |>  # Rename the column for clarity
   kable(
     caption = "<strong style='color:black; font-size:16px;'>Steven Spielberg Movies Available on Netflix</strong>",
     col.names = c("Title"),
     align = "l",
     escape = FALSE 
-  ) %>%
+  ) |>
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed"),
     full_width = FALSE,
@@ -178,26 +178,126 @@ Two caveats: - We have exact dates for the when the movie was added, but only th
 
 ```{r}
 
-netflix <- netflix |>
-  mutate(
-    date_added = mdy(date_added),  
-    release_year = as.numeric(release_year)  
+library(lubridate)
+library(knitr)
+library(kableExtra)
+
+netflix_movies <- netflix |>
+  subset(type == "Movie" & !is.na(date_added) & !is.na(release_year)) |>
+  transform(
+    date_added = mdy(date_added),
+    release_year = as.numeric(release_year)
   )
 
-netflix <- netflix |>
-  mutate(added_year = year(date_added))  
+netflix_movies <- netflix_movies |>
+  transform(
+    added_year = year(date_added)
+  )
 
-netflix <- netflix |>
-  mutate(time_diff_years = added_year - release_year)  
+netflix_movies <- netflix_movies |>
+  transform(
+    time_diff_years = added_year - release_year
+  )
 
-netflix_era <- netflix |>
-  filter(!is.na(time_diff_years) & time_diff_years >= 0 & release_year >= 2007) 
+netflix_movies_filtered <- netflix_movies |>
+  subset(!is.na(time_diff_years) & time_diff_years >= 0 & release_year >= 2007)
 
-average_time_diff <- netflix_era |>
-  summarize(average_diff = mean(time_diff_years, na.rm = TRUE))
+average_time_diff <- mean(netflix_movies_filtered$time_diff_years, na.rm = TRUE)
 
-average_time_diff
+data.frame(`Average Time Difference (Years)` = round(average_time_diff, 2)) |>
+  kable(
+    col.names = c("Average Time Difference (Years)"),
+    align = "c"
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
+
 
 ```
 
-On average, it takes 2.14 years for a movie to be added on Netflix after being released in the theaters.
+On average, it takes 2.46 years for a movie to be added to Netflix after being released in theaters.
+
+
+Additionally, let's look at how the average time differ across content ratings. The motion picture content ratings used to indicate the suitability of a movie for different audiences. Below are the description of each rating retrieved from [Spectrum](https://www.spectrum.net/support/tv/tv-and-movie-ratings-descriptions).
+
++ G: General audiences, suitable for all ages
++ PG: Parental guidance suggested, some material may not be suitable for children
++ PG-13: Parents strongly cautioned, some material may be inappropriate for children under 13
++ R: Restricted, under 17 requires an accompanying parent or adult guardian
++ NC-17: Clearly adult
++ UR: Unrated
++ NR: Not rated (not officially assigned)
++ TV-Y: All children
++ TV-Y7: Directed to older children
++ TV-Y7-FV: Directed to older children - fantasy violence
++ TV-G: General audience
++ TV-PG: Parental guidance suggested
++ TV-14: Parents strongly cautioned
++ TV-MA: Mature audience only
+
+
+```{r}
+library(lubridate)
+library(ggplot2)
+
+
+movies_data <- netflix |>
+  subset(type == "Movie" & !is.na(date_added) & !is.na(release_year)) |>
+  transform(
+    date_added = mdy(date_added),
+    release_year = as.numeric(release_year)
+  )
+
+
+movies_data <- movies_data |>
+  transform(
+    added_year = year(date_added)
+  )
+
+
+movies_data <- movies_data |>
+  transform(
+    time_diff_years = added_year - release_year
+  )
+
+
+movies_filtered <- movies_data |>
+  subset(!is.na(time_diff_years) & time_diff_years >= 0 & release_year >= 2007)
+
+
+average_time_by_rating_table <- aggregate(
+  time_diff_years ~ rating,
+  data = movies_filtered,
+  FUN = function(x) mean(x, na.rm = TRUE)
+)
+
+
+average_time_by_rating_table <- average_time_by_rating_table[order(-average_time_by_rating_table$time_diff_years), ]
+
+
+ggplot(average_time_by_rating_table, aes(x = reorder(rating, -time_diff_years), y = time_diff_years, fill = rating)) +
+  geom_bar(stat = "identity", width = 0.7, show.legend = FALSE) +
+  geom_text(aes(label = round(time_diff_years, 2)), vjust = -0.5, size = 5) +
+  labs(
+    title = "Average Time Difference by Rating (Movies Only)",
+    x = "Rating",
+    y = "Average Time Difference (Years)"
+  ) +
+  theme_minimal() +
+  theme(
+    text = element_text(size = 14),
+    plot.title = element_text(hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 12),
+    plot.margin = margin(10, 10, 30, 10)
+  ) +
+  coord_cartesian(clip = "off")
+
+
+```
+
+
+Unrated movies (UR) exhibited the longest wait time for the movie to be uploaded on Netflix. This was followed by PG-13 rated movies and PG rated movies. UR, PG-13, PG, R, G, TV-14, and NR rated movies all took longer than the average time for all movies.
+

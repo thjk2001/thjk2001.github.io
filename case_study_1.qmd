@@ -30,14 +30,14 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 
-# Adjust team names to combine Soviet Union and Russia into "USSR/Russia"
-olympics <- olympics %>%
+
+olympics <- olympics |>
   mutate(team = case_when(
     team %in% c("Soviet Union", "Russia") ~ "USSR/Russia",
     TRUE ~ team
   ))
 
-# Get the top 10 athletes by total medals
+
 top_athletes <- olympics |>
   filter(!is.na(medal)) |>
   group_by(name, team) |>
@@ -45,31 +45,31 @@ top_athletes <- olympics |>
   arrange(desc(total_medals)) |>
   slice(1:10)
 
-# Create a nice table for top athletes
-top_athletes %>%
+
+top_athletes |>
   kable(
     caption = "Top 10 Athletes by Total Medals (USSR/Russia Combined)",
     col.names = c("Name", "Team", "Total Medals"),
     align = "lcl"
-  ) %>%
+  ) |>
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed"),
     full_width = FALSE
   )
 
-# Get the top nations by the number of top athletes
+
 top_nations <- top_athletes |>
   group_by(team) |>
   summarise(count = n(), .groups = "drop") |>
   arrange(desc(count))
 
-# Create a nice table for top nations
-top_nations %>%
+
+top_nations |>
   kable(
     caption = "Top Nations by Number of Top Athletes (USSR/Russia Combined)",
     col.names = c("Team", "Number of Athletes"),
     align = "lc"
-  ) %>%
+  ) |>
   kable_styling(
     bootstrap_options = c("striped", "hover", "condensed"),
     full_width = FALSE

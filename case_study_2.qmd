@@ -75,20 +75,19 @@ The bar chart represents the total number of yellow cards each referee has given
 
 ```{r}
 library(ggplot2)
-library(dplyr)
 
 # Summarize total yellow cards at home and away
 yellow_cards_summary <- arsenal_yellow_by_referee %>%
   summarise(
     Home = sum(Home_Yellow_Cards),
     Away = sum(Away_Yellow_Cards)
-  ) %>%
+  ) |>
   pivot_longer(cols = everything(), names_to = "Location", values_to = "Total_Yellow_Cards")
 
-# Create the bar chart
+
 ggplot(yellow_cards_summary, aes(x = Location, y = Total_Yellow_Cards, fill = Location)) +
   geom_bar(stat = "identity", width = 0.6) +
-  geom_text(aes(label = Total_Yellow_Cards), vjust = -0.2, size = 5) + # Adjust vertical position of text
+  geom_text(aes(label = Total_Yellow_Cards), vjust = -0.2, size = 5) + 
   labs(
     title = "Yellow Cards Arsenal Received by Location",
     x = "Location",
@@ -96,12 +95,11 @@ ggplot(yellow_cards_summary, aes(x = Location, y = Total_Yellow_Cards, fill = Lo
   ) +
   theme_minimal() +
   theme(
-    plot.margin = margin(10, 10, 20, 10), # Add extra space below and above the plot
+    plot.margin = margin(10, 10, 20, 10), 
     text = element_text(size = 14),
     legend.position = "none"
   ) +
-  ylim(0, max(yellow_cards_summary$Total_Yellow_Cards) + 5) # Increase y-axis limit to prevent clipping
-
+  ylim(0, max(yellow_cards_summary$Total_Yellow_Cards) + 5)
 
 ```
 
