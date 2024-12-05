@@ -103,6 +103,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -182,11 +184,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#some-trends-in-netflix-movies" id="toc-some-trends-in-netflix-movies" class="nav-link active" data-scroll-target="#some-trends-in-netflix-movies">Some Trends in Netflix Movies</a>
+  <ul class="collapse">
+  <li><a href="#who-are-the-actors-with-the-most-movie-appearances-lets-find-the-top-5-actors-by-the-number-of-appearances." id="toc-who-are-the-actors-with-the-most-movie-appearances-lets-find-the-top-5-actors-by-the-number-of-appearances." class="nav-link" data-scroll-target="#who-are-the-actors-with-the-most-movie-appearances-lets-find-the-top-5-actors-by-the-number-of-appearances.">1. Who are the actors with the most movie appearances? Let’s find the top 5 actors by the number of appearances.</a></li>
+  <li><a href="#most-popular-words-in-movie-titles" id="toc-most-popular-words-in-movie-titles" class="nav-link" data-scroll-target="#most-popular-words-in-movie-titles">2. Most popular words in movie titles:</a></li>
+  <li><a href="#steven-spielberg" id="toc-steven-spielberg" class="nav-link" data-scroll-target="#steven-spielberg">3. Steven Spielberg</a></li>
+  </ul></li>
+  <li><a href="#too-lazy-for-theaters.-when-can-i-watch-a-new-movie-on-netflix" id="toc-too-lazy-for-theaters.-when-can-i-watch-a-new-movie-on-netflix" class="nav-link" data-scroll-target="#too-lazy-for-theaters.-when-can-i-watch-a-new-movie-on-netflix">4. Too lazy for theaters. When can I watch a new movie on Netflix?</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content column-page-left" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -200,7 +214,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta column-page-left">
 
     <div>
     <div class="quarto-title-meta-heading">Author</div>
@@ -224,10 +238,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<section id="some-trends-in-netflix-movies" class="level2">
+<h2 class="anchored" data-anchor-id="some-trends-in-netflix-movies">Some Trends in Netflix Movies</h2>
 <p><a href="https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-04-20/readme.md">TidyTuesday Reference</a></p>
 <p><a href="https://www.kaggle.com/datasets/shivamb/netflix-shows">Original Data Source</a></p>
+<p><strong>Objective:</strong> Analyze some interesting trends in Netflix movies as of 2019</p>
 <p>This dataset consists of tv shows and movies available on Netflix as of 2019. The dataset is collected from Flixable which is a third-party Netflix search engine.</p>
-<p>In 2018, they released an interesting report which shows that the number of TV shows on Netflix has nearly tripled since 2010. The streaming service’s number of movies has decreased by more than 2,000 titles since 2010, while its number of TV shows has nearly tripled. It will be interesting to explore what all other insights can be obtained from the same dataset.</p>
+<p>In 2018, Flixable released an interesting report which shows that the number of TV shows on Netflix has nearly tripled since 2010. The streaming service’s number of movies has decreased by more than 2,000 titles since 2010, while its number of TV shows has nearly tripled. It will be interesting to explore what other insights can be obtained from the same dataset.</p>
 <p>Integrating this dataset with other external datasets such as IMDB ratings, rotten tomatoes can also provide many interesting findings.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get the Data</span></span>
@@ -245,9 +262,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ol type="1">
-<li>Who are the actors with the most movie appearances? Let’s find the top 5 actors by the number of appearances.</li>
-</ol>
+<section id="who-are-the-actors-with-the-most-movie-appearances-lets-find-the-top-5-actors-by-the-number-of-appearances." class="level3">
+<h3 class="anchored" data-anchor-id="who-are-the-actors-with-the-most-movie-appearances-lets-find-the-top-5-actors-by-the-number-of-appearances.">1. Who are the actors with the most movie appearances? Let’s find the top 5 actors by the number of appearances.</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>actor_count <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"Movie"</span>, <span class="sc">!</span><span class="fu">is.na</span>(cast)) <span class="sc">|&gt;</span> </span>
@@ -275,8 +291,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Interesting, I actually do not know any of these actors/actresses. Upon some research, I have found that all of them are Indian actors/actresses.</p>
-<p>Just out of curiosity, let’s find out which countries produced the most number of movies?</p>
+<p>Interesting, I actually do not know any of these actors/actresses. Upon some research, I have found that all of them are Indian actors/actresses. These actors/actresses were very active in their respective careers.</p>
+<p>As a side analysis, let’s find out which countries produced the most number of movies?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>country_count_movies <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"Movie"</span>, <span class="sc">!</span><span class="fu">is.na</span>(country)) <span class="sc">|&gt;</span>  </span>
@@ -304,83 +320,197 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
-<p>Unsurprisingly, the US has produced the most Netflix movies.This makes sense given that Hollywood is the global hub of film production. With the growing size of Bollywood, India comes in for second place.</p>
-<ol start="2" type="1">
-<li>Most popular words in movie titles:</li>
-</ol>
+<p>Unsurprisingly, the US has produced the most Netflix movies. This makes sense given that Hollywood is the global hub of film production. The US has produced more than double the amount of movies than second place India and more than the movie productions of the next four countries combined. With the growing size of Bollywood, India comes in for second place. This may speak to the high number of Indian actors/actresses in the first study.</p>
+</section>
+<section id="most-popular-words-in-movie-titles" class="level3">
+<h3 class="anchored" data-anchor-id="most-popular-words-in-movie-titles">2. Most popular words in movie titles:</h3>
 <p>We have excluded articles, pronouns, prepositions and any common stop words.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A list of words we want to exclude</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>stop_words <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"an"</span>, <span class="st">"the"</span>, <span class="st">"and"</span>, <span class="st">"in"</span>, <span class="st">"on"</span>, <span class="st">"of"</span>, <span class="st">"with"</span>, <span class="st">"for"</span>, <span class="st">"to"</span>, <span class="st">"he"</span>, <span class="st">"she"</span>, <span class="st">"my"</span>, <span class="st">"it"</span>, <span class="st">"him"</span>, <span class="st">"her"</span>, <span class="st">"above"</span>, <span class="st">"below"</span>, <span class="st">"top"</span>, <span class="st">"bottom"</span>, <span class="st">"between"</span>, <span class="st">"front"</span>, <span class="st">"back"</span>, <span class="st">"beneath"</span>, <span class="st">"they"</span>, <span class="st">"me"</span>, <span class="st">"you"</span>, <span class="st">"them"</span>, <span class="st">"us"</span>, <span class="st">"we"</span>, <span class="st">"that"</span>, <span class="st">"this"</span>, <span class="st">"these"</span>, <span class="st">"those"</span>, <span class="st">"I"</span>, <span class="st">"from"</span>, <span class="st">"i"</span>, <span class="st">"at"</span>, <span class="st">""</span>)</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(knitr)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>word_count <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"Movie"</span>, <span class="sc">!</span><span class="fu">is.na</span>(title)) <span class="sc">|&gt;</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">clean_title =</span> <span class="fu">str_remove_all</span>(title, <span class="st">"[^A-Za-z</span><span class="sc">\\</span><span class="st">s]"</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">clean_title =</span> <span class="fu">str_to_lower</span>(clean_title)) <span class="sc">|&gt;</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(clean_title, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>clean_title <span class="sc">%in%</span> stop_words) <span class="sc">|&gt;</span> </span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(clean_title, <span class="at">sort =</span> <span class="cn">TRUE</span>) </span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(word_count, <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 2
-   clean_title     n
-   &lt;chr&gt;       &lt;int&gt;
- 1 love           91
- 2 christmas      72
- 3 movie          60
- 4 man            58
- 5 story          54
- 6 life           44
- 7 world          42
- 8 little         39
- 9 live           38
-10 one            38</code></pre>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># A list of words we want to exclude</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>stop_words <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"a"</span>, <span class="st">"an"</span>, <span class="st">"the"</span>, <span class="st">"and"</span>, <span class="st">"in"</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                , <span class="st">"on"</span>, <span class="st">"of"</span>, <span class="st">"with"</span>, <span class="st">"for"</span>, <span class="st">"to"</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                , <span class="st">"he"</span>, <span class="st">"she"</span>, <span class="st">"my"</span>, <span class="st">"it"</span>, <span class="st">"him"</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                , <span class="st">"her"</span>, <span class="st">"above"</span>, <span class="st">"below"</span>, <span class="st">"top"</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                , <span class="st">"bottom"</span>, <span class="st">"between"</span>, <span class="st">"front"</span>, <span class="st">"back"</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                , <span class="st">"beneath"</span>, <span class="st">"they"</span>, <span class="st">"me"</span>, <span class="st">"you"</span>, <span class="st">"them"</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                , <span class="st">"us"</span>, <span class="st">"we"</span>, <span class="st">"that"</span>, <span class="st">"this"</span>, <span class="st">"these"</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                , <span class="st">"those"</span>, <span class="st">"I"</span>, <span class="st">"from"</span>, <span class="st">"i"</span>, <span class="st">"at"</span>, <span class="st">""</span>)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>word_count <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"Movie"</span>, <span class="sc">!</span><span class="fu">is.na</span>(title)) <span class="sc">|&gt;</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">clean_title =</span> <span class="fu">str_remove_all</span>(title, <span class="st">"[^A-Za-z</span><span class="sc">\\</span><span class="st">s]"</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">clean_title =</span> <span class="fu">str_to_lower</span>(clean_title)) <span class="sc">|&gt;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_rows</span>(clean_title, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">s+"</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span>clean_title <span class="sc">%in%</span> stop_words) <span class="sc">|&gt;</span> </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(clean_title, <span class="at">sort =</span> <span class="cn">TRUE</span>) </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>word_count <span class="sc">%&gt;%</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">head</span>(<span class="dv">10</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"&lt;strong style='color:black; font-size:16px;'&gt;Top 10 Most Frequent Words in Netflix Movie Titles&lt;/strong&gt;"</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Word"</span>, <span class="st">"Frequency"</span>),</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="st">"c"</span>),</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">escape =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"center"</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small" data-quarto-postprocess="true">
+<caption><strong>Top 10 Most Frequent Words in Netflix Movie Titles</strong></caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Word</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Frequency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">love</td>
+<td style="text-align: center;">91</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">christmas</td>
+<td style="text-align: center;">72</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">movie</td>
+<td style="text-align: center;">60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">man</td>
+<td style="text-align: center;">58</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">story</td>
+<td style="text-align: center;">54</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">life</td>
+<td style="text-align: center;">44</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">world</td>
+<td style="text-align: center;">42</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">little</td>
+<td style="text-align: center;">39</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">live</td>
+<td style="text-align: center;">38</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">one</td>
+<td style="text-align: center;">38</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
 </div>
-<p>Love and Christmas are the top two most common words. These results do makes sense as these are pretty popular topics.</p>
-<ol start="3" type="1">
-<li>The most commercially successful filmmaker in the history of Hollywood is Steven Spielburg. Let’s figure out which of his movies are on Netflix.</li>
-</ol>
+<p>Love and Christmas are the top two most common words. These results do makes sense as these are popular topics.</p>
+</section>
+<section id="steven-spielberg" class="level3">
+<h3 class="anchored" data-anchor-id="steven-spielberg">3. Steven Spielberg</h3>
+<p>The most commercially successful filmmaker in the history of Hollywood is Steven Spielberg. Steven Spielberg is the creator of many of the most successful franchises and stand-alone films. They include the <em>Indiana Jones</em> series, the <em>Jurassic Park</em> series, <em>Saving Private Ryan</em>, and <em>Jaws</em>. Let’s figure out which of his movies are on Netflix.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>spielberg_movies <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"Movie"</span>, <span class="fu">str_detect</span>(director, <span class="st">"Steven Spielberg"</span>))</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(spielberg_movies<span class="sc">$</span>title)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Catch Me If You Can"                               
-[2] "Hook"                                              
-[3] "Indiana Jones and the Kingdom of the Crystal Skull"
-[4] "Indiana Jones and the Last Crusade"                
-[5] "Indiana Jones and the Raiders of the Lost Ark"     
-[6] "Indiana Jones and the Temple of Doom"              </code></pre>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>spielberg_movies <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(type <span class="sc">==</span> <span class="st">"Movie"</span>, <span class="fu">str_detect</span>(director, <span class="st">"Steven Spielberg"</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>spielberg_movies <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(title) <span class="sc">%&gt;%</span>  <span class="co"># Select only the title column</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Title"</span> <span class="ot">=</span> title) <span class="sc">%&gt;%</span>  <span class="co"># Rename the column for clarity</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">"&lt;strong style='color:black; font-size:16px;'&gt;Steven Spielberg Movies Available on Netflix&lt;/strong&gt;"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Title"</span>),</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="st">"l"</span>,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">escape =</span> <span class="cn">FALSE</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">"striped"</span>, <span class="st">"hover"</span>, <span class="st">"condensed"</span>),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">"center"</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small" data-quarto-postprocess="true">
+<caption><strong>Steven Spielberg Movies Available on Netflix</strong></caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Title</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Catch Me If You Can</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hook</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Indiana Jones and the Kingdom of the Crystal Skull</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Indiana Jones and the Last Crusade</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Indiana Jones and the Raiders of the Lost Ark</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Indiana Jones and the Temple of Doom</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Lincoln</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Schindler's List</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The Adventures of Tintin</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">War Horse</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
 </div>
-<p>Surprising, only 6 are available on Netflix. Given sheer amount of Spielberg movies we know of, this a very small number.</p>
-<ol start="4" type="1">
-<li>Following Covid-19, less people are going to the movies. At the same time over-the-top streaming services have become more influential. Nowadays, people are wondering “when is my favorite movie going to be on Netflix?”. So let’s find out, on average, how long does it take for a movie to be added on Netflix.</li>
-</ol>
+<p>Surprising, only 10 are available on Netflix. Given sheer amount of Spielberg movies we know of, this a very small number.</p>
+</section>
+</section>
+<section id="too-lazy-for-theaters.-when-can-i-watch-a-new-movie-on-netflix" class="level2">
+<h2 class="anchored" data-anchor-id="too-lazy-for-theaters.-when-can-i-watch-a-new-movie-on-netflix">4. Too lazy for theaters. When can I watch a new movie on Netflix?</h2>
+<p>Following Covid-19, fewer people are going to the movies. At the same time over-the-top streaming services have become more influential. Nowadays, people are wondering “when is my favorite movie going to be on Netflix?”. So let’s find out, on average, how long does it take for a movie to be added on Netflix.</p>
 <p>Two caveats: - We have exact dates for the when the movie was added, but only the year data is available for when it was released. Hence, we will just find the number of years. - Netflix started streaming services in 2007. Any movie produced before 2007 will be excluded because that just automatically increases the average.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>netflix <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">date_added =</span> <span class="fu">mdy</span>(date_added),  </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">release_year =</span> <span class="fu">as.numeric</span>(release_year)  </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>netflix <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">added_year =</span> <span class="fu">year</span>(date_added))  </span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>netflix <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_diff_years =</span> added_year <span class="sc">-</span> release_year)  </span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>netflix_era <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(time_diff_years) <span class="sc">&amp;</span> time_diff_years <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> release_year <span class="sc">&gt;=</span> <span class="dv">2007</span>) </span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>average_time_diff <span class="ot">&lt;-</span> netflix_era <span class="sc">|&gt;</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_diff =</span> <span class="fu">mean</span>(time_diff_years, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>average_time_diff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>netflix <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">date_added =</span> <span class="fu">mdy</span>(date_added),  </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">release_year =</span> <span class="fu">as.numeric</span>(release_year)  </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>netflix <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">added_year =</span> <span class="fu">year</span>(date_added))  </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>netflix <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">time_diff_years =</span> added_year <span class="sc">-</span> release_year)  </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>netflix_era <span class="ot">&lt;-</span> netflix <span class="sc">|&gt;</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(time_diff_years) <span class="sc">&amp;</span> time_diff_years <span class="sc">&gt;=</span> <span class="dv">0</span> <span class="sc">&amp;</span> release_year <span class="sc">&gt;=</span> <span class="dv">2007</span>) </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>average_time_diff <span class="ot">&lt;-</span> netflix_era <span class="sc">|&gt;</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">average_diff =</span> <span class="fu">mean</span>(time_diff_years, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>average_time_diff</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 1
   average_diff
@@ -391,6 +521,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>On average, it takes 2.14 years for a movie to be added on Netflix after being released in the theaters.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
