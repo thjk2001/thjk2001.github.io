@@ -25,35 +25,71 @@ olympics <- tuesdata$olympics
 
 ```{r}
 library(tidyverse)
+library(knitr)
+library(kableExtra)
 
+# Adjust team names to combine Soviet Union and Russia into "USSR/Russia"
+olympics <- olympics %>%
+  mutate(team = case_when(
+    team %in% c("Soviet Union", "Russia") ~ "USSR/Russia",
+    TRUE ~ team
+  ))
+
+# Get the top 10 athletes by total medals
 top_athletes <- olympics |>
   filter(!is.na(medal)) |>
   group_by(name, team) |>
-  summarise(total_medals = n()) |>
-  ungroup() |>
+  summarise(total_medals = n(), .groups = "drop") |>
   arrange(desc(total_medals)) |>
   slice(1:10)
 
-top_athletes
+# Create a nice table for top athletes
+top_athletes %>%
+  kable(
+    caption = "Top 10 Athletes by Total Medals (USSR/Russia Combined)",
+    col.names = c("Name", "Team", "Total Medals"),
+    align = "lcl"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE
+  )
 
+# Get the top nations by the number of top athletes
 top_nations <- top_athletes |>
   group_by(team) |>
-  summarise(count = n()) |>
+  summarise(count = n(), .groups = "drop") |>
   arrange(desc(count))
 
-top_nations
+# Create a nice table for top nations
+top_nations %>%
+  kable(
+    caption = "Top Nations by Number of Top Athletes (USSR/Russia Combined)",
+    col.names = c("Team", "Number of Athletes"),
+    align = "lc"
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE
+  )
+
+
+
 ```
 
+
 ```{r}
+library(ggplot2)
+
 ggplot(top_nations, aes(x = reorder(team, -count), y = count)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   labs(title = "Number of Top 10 Athletes by Country",
-       x = "Country (Team)",
+       x = "Country",
        y = "Number of Athletes") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-USSR and United States produced the highest number of most successful athletes. Russia (formerly USSR) and the US usually rank top 3 for medal counts. It is actually surprising to find China not represented in the list.
+Russia (formerly USSR) produced the highest number of most successful athletes. Russia/USSR and the US usually rank top 2 for medal counts. It is actually surprising to find China not represented in the list, given the recent success of China in Olympics.
 
-As for most successful athletes, Michael Phelps is by far has won the most medals (28).
+As for most successful athletes, Michael Phelps by far has won the most medals (28). His success if unprecedented, with the second most decorated athlete having a whopping 10 fewer medals than Phelps.

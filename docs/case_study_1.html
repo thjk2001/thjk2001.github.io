@@ -69,6 +69,8 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -194,31 +196,106 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/">Original Data Source</a></p>
 <p>Objective: Usually it is the Olympic athletes that receive the fame. However, at the end of the day they each represent their country with pride. Let’s find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). So, which countries have produced the best talents?</p>
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 10 × 3
-   name                                                team         total_medals
-   &lt;chr&gt;                                               &lt;chr&gt;               &lt;int&gt;
- 1 "Michael Fred Phelps, II"                           United Stat…           28
- 2 "Larysa Semenivna Latynina (Diriy-)"                Soviet Union           18
- 3 "Nikolay Yefimovich Andrianov"                      Soviet Union           15
- 4 "Borys Anfiyanovych Shakhlin"                       Soviet Union           13
- 5 "Edoardo Mangiarotti"                               Italy                  13
- 6 "Ole Einar Bjrndalen"                               Norway                 13
- 7 "Takashi Ono"                                       Japan                  13
- 8 "Aleksey Yuryevich Nemov"                           Russia                 12
- 9 "Dara Grace Torres (-Hoffman, -Minas)"              United Stat…           12
-10 "Jennifer Elisabeth \"Jenny\" Thompson (-Cumpelik)" United Stat…           12</code></pre>
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small" data-quarto-postprocess="true">
+<caption>Top 10 Athletes by Total Medals (USSR/Russia Combined)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Name</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Team</th>
+<th style="text-align: left;" data-quarto-table-cell-role="th">Total Medals</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Michael Fred Phelps, II</td>
+<td style="text-align: center;">United States</td>
+<td style="text-align: left;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Larysa Semenivna Latynina (Diriy-)</td>
+<td style="text-align: center;">USSR/Russia</td>
+<td style="text-align: left;">18</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Nikolay Yefimovich Andrianov</td>
+<td style="text-align: center;">USSR/Russia</td>
+<td style="text-align: left;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Borys Anfiyanovych Shakhlin</td>
+<td style="text-align: center;">USSR/Russia</td>
+<td style="text-align: left;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Edoardo Mangiarotti</td>
+<td style="text-align: center;">Italy</td>
+<td style="text-align: left;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ole Einar Bjrndalen</td>
+<td style="text-align: center;">Norway</td>
+<td style="text-align: left;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Takashi Ono</td>
+<td style="text-align: center;">Japan</td>
+<td style="text-align: left;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Aleksey Yuryevich Nemov</td>
+<td style="text-align: center;">USSR/Russia</td>
+<td style="text-align: left;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Dara Grace Torres (-Hoffman, -Minas)</td>
+<td style="text-align: center;">United States</td>
+<td style="text-align: left;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jennifer Elisabeth "Jenny" Thompson (-Cumpelik)</td>
+<td style="text-align: center;">United States</td>
+<td style="text-align: left;">12</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 2
-  team          count
-  &lt;chr&gt;         &lt;int&gt;
-1 Soviet Union      3
-2 United States     3
-3 Italy             1
-4 Japan             1
-5 Norway            1
-6 Russia            1</code></pre>
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small" data-quarto-postprocess="true">
+<caption>Top Nations by Number of Top Athletes (USSR/Russia Combined)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Team</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Number of Athletes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">USSR/Russia</td>
+<td style="text-align: center;">4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">United States</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Italy</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Japan</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Norway</td>
+<td style="text-align: center;">1</td>
+</tr>
+</tbody>
+</table>
+
+
 </div>
 </div>
 <div class="cell">
@@ -230,8 +307,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </div>
-<p>USSR and United States produced the highest number of most successful athletes. Russia (formerly USSR) and the US usually rank top 3 for medal counts. It is actually surprising to find China not represented in the list.</p>
-<p>As for most successful athletes, Michael Phelps is by far has won the most medals (28).</p>
+<p>Russia (formerly USSR) produced the highest number of most successful athletes. Russia/USSR and the US usually rank top 2 for medal counts. It is actually surprising to find China not represented in the list, given the recent success of China in Olympics.</p>
+<p>As for most successful athletes, Michael Phelps by far has won the most medals (28). His success if unprecedented, with the second most decorated athlete having a whopping 10 fewer medals than Phelps.</p>
 
 
 
