@@ -182,11 +182,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#wideband-acoustic-immittance-wai-analysis" id="toc-wideband-acoustic-immittance-wai-analysis" class="nav-link active" data-scroll-target="#wideband-acoustic-immittance-wai-analysis">Wideband acoustic immittance (WAI) Analysis</a>
+  <ul class="collapse">
+  <li><a href="#repliate-figure-1" id="toc-repliate-figure-1" class="nav-link" data-scroll-target="#repliate-figure-1">1. Repliate Figure 1</a></li>
+  <li><a href="#deeper-dive-into-feeney-et-al.-2017" id="toc-deeper-dive-into-feeney-et-al.-2017" class="nav-link" data-scroll-target="#deeper-dive-into-feeney-et-al.-2017">2. Deeper Dive into Feeney et al.&nbsp;(2017)</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
+<main class="content column-page-left" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -200,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 
 
-<div class="quarto-title-meta column-page">
+<div class="quarto-title-meta column-page-left">
 
     <div>
     <div class="quarto-title-meta-heading">Author</div>
@@ -224,9 +234,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p><strong>Wideband acoustic immittance (WAI) Analysis</strong></p>
+<section id="wideband-acoustic-immittance-wai-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="wideband-acoustic-immittance-wai-analysis">Wideband acoustic immittance (WAI) Analysis</h2>
+<p><strong>Objective:</strong> Replicating WAI Analysis and Examine a Single Study</p>
 <p><a href="https://www.science.smith.edu/wai-database/">Original Data Source</a></p>
 <p>Background: The WAI database is a comprehensive online database for normative adult WAI measurements. This database is designed to facilitate data sharing and analysis among researchers in the field of audiology. As of July 1, 2019, the database encompasses measurements from 12 peer-reviewed studies, totaling 640 subjects and 914 normal middle ears. This results in 286,774 data points across various frequencies. The establishment of this WAI database represents a significant advancement in audiological research, offering a centralized resource for normative data and promoting collaborative efforts in the study of middle-ear pathologies.</p>
+<section id="repliate-figure-1" class="level3">
+<h3 class="anchored" data-anchor-id="repliate-figure-1">1. Repliate Figure 1</h3>
 <p>The objective is to recreate Figure 1, which represents mean absorbance data from select 12 publications in the Wideband Acoustic Immittance (WAI) database, showing how absorbance varies with frequency across different studies.</p>
 <p>Starter Code to establish connection to the WAI database.</p>
 <div class="cell">
@@ -248,7 +262,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>Subjects <span class="ot">&lt;-</span> <span class="fu">tbl</span>(con_wai, <span class="st">"Subjects"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This SQL code below is for processing and aggregating data from the WAI database. More specifically, this combines data from two tables, Measurements and PI_Info, to calculate and aggregate absorbance values for specific studies and prepare data for visualization.</p>
-<p>We are: 1. Calculate Mean Absorbance: for each unique combination of study, instrument, frequency, and year. 2. Generates Legend Labels: constructs a label for visualization 3. Filters Data: restricts the query to 12 specific studies of interest. 4. Groups Data: organizes results by study, frequency, instrument, and year.</p>
+<p>The following is the detailed process:</p>
+<ul>
+<li>Calculate Mean Absorbance: for each unique combination of study, instrument, frequency, and year.</li>
+<li>Generates Legend Labels: constructs a label for visualization</li>
+<li>Filters Data: restricts the query to 12 specific studies of interest.</li>
+<li>Groups Data: organizes results by study, frequency, instrument, and year.</li>
+</ul>
 <div class="cell" data-output.var="data">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
@@ -276,7 +296,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>    Measurements.Frequency, </span>
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    PI_Info.<span class="dt">Year</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Data Visualization:</p>
+<p><strong>Data Visualization:</strong></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Frequency <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(data<span class="sc">$</span>Frequency)</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -315,7 +335,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Each line corresponds to a specific study in the WAI database, identified by the first author’s name, publication year, and the number of participants.</p>
 <p>In essence, the graph provides a comparative view of absorbance data from multiple studies. It highlights similarities and differences in how different populations and systems respond to sound frequencies.</p>
 <p>Most studies show increasing absorbance from 200 Hz to approximately 1000-2000 Hz, peaking, and then gradually decreasing at higher frequencies. Variability in the data such as differences in peak values and slopes likely reflects variations in study populations, equipment, or methodologies.</p>
-<p><strong>Deeper Dive into Feeney et al.&nbsp;(2017)</strong></p>
+</section>
+<section id="deeper-dive-into-feeney-et-al.-2017" class="level3">
+<h3 class="anchored" data-anchor-id="deeper-dive-into-feeney-et-al.-2017">2. Deeper Dive into Feeney et al.&nbsp;(2017)</h3>
 <p>I decided to choose the most recent study among the 12 selected publications, which was Feeney et al.&nbsp;(2017). This contains various grouping variables such as age, sex, and race/ethnicity. I chose Sex as the grouping variable because it is a common demographic factor in audiological studies and is likely to show differences in middle-ear characteristics.</p>
 <p>The below SQL query takes on a similar process as that of recreating Figure 1. In this case, the Identifier would be the Feeney_2017, instead of all the 12 studies.</p>
 <div class="cell" data-output.var="data">
@@ -333,7 +355,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    Subjects.Sex</span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> Measurements.Frequency;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Data Visualization:</p>
+<p><strong>Data Visualization</strong></p>
 <p>I maintained a similar format for the x and y axis. The X-axis represents frequency (logarithmic scale), the Y-axis shows mean absorbance, and lines differentiate groups by sex (Male, Female, Unknown).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>Frequency <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(data<span class="sc">$</span>Frequency)</span>
@@ -365,13 +387,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>This graph illustrates how middle-ear absorbance varies across frequencies for male, female, and unknown sex groups in the Feeney et al.&nbsp;(2017) study. While the general trend of absorbance is consistent across groups, slight variations at the extremes of the frequency range (low and high) may warrant further exploration. The similarity across sexes suggests that sex is not a significant factor influencing WAI in this study.</p>
-<p>Some key observations: 1. Absorbance increases as frequency rises from 200 Hz to around 1000-2000 Hz, peaks, and then decreases for higher frequencies. All groups show peak absorbance in the range of 1000-4000 Hz, a typical finding in WAI studies, as this range represents optimal middle-ear energy absorption. 2. The absorbance patterns for male and female groups are very similar across frequencies, suggesting that sex may have minimal impact on WAI results in this study. The “Unknown” group also follows a similar trajectory, possibly due to overlapping populations. 3. Slight differences can be seen at lower frequencies (200-400 Hz) and higher frequencies (&gt;6000 Hz), but these differences are marginal.</p>
+<p>Some key observations:</p>
+<ol type="1">
+<li><p>Absorbance increases as frequency rises from 200 Hz to around 1000-2000 Hz, peaks, and then decreases for higher frequencies. All groups show peak absorbance in the range of 1000-4000 Hz, a typical finding in WAI studies, as this range represents optimal middle-ear energy absorption.</p></li>
+<li><p>The absorbance patterns for male and female groups are very similar across frequencies, suggesting that sex may have minimal impact on WAI results in this study. The “Unknown” group also follows a similar trajectory, possibly due to overlapping populations.</p></li>
+<li><p>Slight differences can be seen at lower frequencies (200-400 Hz) and higher frequencies (&gt;6000 Hz), but these differences are marginal.</p></li>
+</ol>
 <p>Best practice purposes…</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dbDisconnect</span>(con_wai)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

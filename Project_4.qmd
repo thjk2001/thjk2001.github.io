@@ -10,11 +10,16 @@ execute:
   message: false
 ---
 
-**Wideband acoustic immittance (WAI) Analysis**
+## Wideband acoustic immittance (WAI) Analysis
+
+**Objective:** Replicating WAI Analysis and Examine a Single Study
 
 [Original Data Source](https://www.science.smith.edu/wai-database/)
 
 Background: The WAI database is a comprehensive online database for normative adult WAI measurements. This database is designed to facilitate data sharing and analysis among researchers in the field of audiology. As of July 1, 2019, the database encompasses measurements from 12 peer-reviewed studies, totaling 640 subjects and 914 normal middle ears. This results in 286,774 data points across various frequencies. The establishment of this WAI database represents a significant advancement in audiological research, offering a centralized resource for normative data and promoting collaborative efforts in the study of middle-ear pathologies.
+
+
+### 1. Repliate Figure 1
 
 The objective is to recreate Figure 1, which represents mean absorbance data from select 12 publications in the Wideband Acoustic Immittance (WAI) database, showing how absorbance varies with frequency across different studies.
 
@@ -42,7 +47,14 @@ Subjects <- tbl(con_wai, "Subjects")
 
 This SQL code below is for processing and aggregating data from the WAI database. More specifically, this combines data from two tables, Measurements and PI_Info, to calculate and aggregate absorbance values for specific studies and prepare data for visualization.
 
-We are: 1. Calculate Mean Absorbance: for each unique combination of study, instrument, frequency, and year. 2. Generates Legend Labels: constructs a label for visualization 3. Filters Data: restricts the query to 12 specific studies of interest. 4. Groups Data: organizes results by study, frequency, instrument, and year.
+
+The following is the detailed process:
+
++ Calculate Mean Absorbance: for each unique combination of study, instrument, frequency, and year.
++ Generates Legend Labels: constructs a label for visualization
++ Filters Data: restricts the query to 12 specific studies of interest.
++ Groups Data: organizes results by study, frequency, instrument, and year.
+
 
 ```{sql, connection=con_wai, output.var="data"}
 
@@ -74,7 +86,7 @@ GROUP BY
 
 ```
 
-Data Visualization:
+**Data Visualization:**
 
 ```{r, fig.height=8, fig.width=8}
 
@@ -116,7 +128,8 @@ In essence, the graph provides a comparative view of absorbance data from multip
 
 Most studies show increasing absorbance from 200 Hz to approximately 1000-2000 Hz, peaking, and then gradually decreasing at higher frequencies. Variability in the data such as differences in peak values and slopes likely reflects variations in study populations, equipment, or methodologies.
 
-**Deeper Dive into Feeney et al. (2017)**
+
+### 2. Deeper Dive into Feeney et al. (2017)
 
 I decided to choose the most recent study among the 12 selected publications, which was Feeney et al. (2017). This contains various grouping variables such as age, sex, and race/ethnicity. I chose Sex as the grouping variable because it is a common demographic factor in audiological studies and is likely to show differences in middle-ear characteristics.
 
@@ -140,7 +153,7 @@ ORDER BY Measurements.Frequency;
 
 ```
 
-Data Visualization:
+**Data Visualization**
 
 I maintained a similar format for the x and y axis. The X-axis represents frequency (logarithmic scale), the Y-axis shows mean absorbance, and lines differentiate groups by sex (Male, Female, Unknown).
 
@@ -170,7 +183,15 @@ ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = Sex)) +
 
 This graph illustrates how middle-ear absorbance varies across frequencies for male, female, and unknown sex groups in the Feeney et al. (2017) study. While the general trend of absorbance is consistent across groups, slight variations at the extremes of the frequency range (low and high) may warrant further exploration. The similarity across sexes suggests that sex is not a significant factor influencing WAI in this study.
 
-Some key observations: 1. Absorbance increases as frequency rises from 200 Hz to around 1000-2000 Hz, peaks, and then decreases for higher frequencies. All groups show peak absorbance in the range of 1000-4000 Hz, a typical finding in WAI studies, as this range represents optimal middle-ear energy absorption. 2. The absorbance patterns for male and female groups are very similar across frequencies, suggesting that sex may have minimal impact on WAI results in this study. The "Unknown" group also follows a similar trajectory, possibly due to overlapping populations. 3. Slight differences can be seen at lower frequencies (200-400 Hz) and higher frequencies (\>6000 Hz), but these differences are marginal.
+Some key observations:
+
+1. Absorbance increases as frequency rises from 200 Hz to around 1000-2000 Hz, peaks, and then decreases for higher frequencies. All groups show peak absorbance in the range of 1000-4000 Hz, a typical finding in WAI studies, as this range represents optimal middle-ear energy absorption.
+
+2. The absorbance patterns for male and female groups are very similar across frequencies, suggesting that sex may have minimal impact on WAI results in this study. The "Unknown" group also follows a similar trajectory, possibly due to overlapping populations.
+
+3. Slight differences can be seen at lower frequencies (200-400 Hz) and higher frequencies (\>6000 Hz), but these differences are marginal.
+
+
 
 Best practice purposes...
 
