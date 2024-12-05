@@ -1,7 +1,5 @@
 ---
-title: "Movies on Netflix"
-description: |
-  Presentation of Project Revisions (Focus on Project 2)
+title: "Flight Delays"
 author: Jack Kim
 date: December 9, 2024
 format:
@@ -19,16 +17,8 @@ execute:
 
 ## Overview of Project
 
-Analyze some interesting trends in Netflix movies as of 2019
-
-Very interesting tidytuesday dataset on Netflix movies and TV series.
 
 
-
-## Most Popular Words in Movie Titles
-
-
-## When is it available on Netflix?
 
 
 

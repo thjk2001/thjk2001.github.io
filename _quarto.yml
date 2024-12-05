@@ -27,7 +27,7 @@ website:
       - text: Presentations
         menu: 
           - href: Project_5.qmd
-            text: Insights into Netflix Movies
+            text: Flight Delays
       
         
 format:
