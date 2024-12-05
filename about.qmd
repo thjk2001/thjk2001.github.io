@@ -2,7 +2,10 @@
 title: "Taehwan (Jack) Kim | 김태환"
 ---
 
-# Education
+# Example Heading
 
+This is regular text.
 
-# Work Experience
+<span style="font-size:24px; color:blue;">This is custom-sized text.</span>
+
+More regular text here.
