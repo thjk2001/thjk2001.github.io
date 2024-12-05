@@ -10,17 +10,18 @@ execute:
   message: false
 ---
 
-**Are departure delays significantly different between morning and evening flights?**
+## Are departure delays significantly different between morning and evening flights?
 
-\[Objective\] In this analysis, I will investigate whether there is a significant difference in departure delays between morning and evening flights using data from the nycflights13 package. To do this, I will perform a permutation test, where I will shuffle the time-of-day labels (morning/evening) and repeatedly calculate the difference in mean departure delays. This will help simulate the null hypothesis, which assumes that the time of day has no effect on departure delays. By comparing the observed difference in delays to this simulated distribution, I will assess the statistical significance of the observed difference.
+**Objective:** In this analysis, I will investigate whether there is a significant difference in departure delays between morning and evening flights using data from the nycflights13 package. To do this, I will perform a permutation test, where I will shuffle the time-of-day labels (morning/evening) and repeatedly calculate the difference in mean departure delays. This will help simulate the null hypothesis, which assumes that the time of day has no statistical significance on departure delays. By comparing the observed difference in delays to this simulated distribution, I will assess the statistical significance of the observed difference.
 
-\[Null Hypothesis\] Time of day (morning vs. evening) has no effect on departure delays.
+\[Null Hypothesis\] There is no difference in the mean departure delays between morning flights and evening flights.
 
 ```{r}
 library(nycflights13)
 library(dplyr)
 library(purrr)
 library(ggplot2)
+library(DT)
 ```
 
 ```{r}
@@ -33,7 +34,19 @@ flights <- nycflights13::flights |>
   )) |>
   filter(time_of_day != "other")  # Exclude flights that are not in the morning or evening
 
-head(flights, 10)
+
+# Display the first 5 rows as an interactive table
+datatable(
+  flights[1:5, ],  # Select the first 5 rows
+  options = list(
+    pageLength = 5,      # Display 5 rows per page
+    dom = 't',           # Show only the table (no search box, etc.)
+    scrollX = TRUE       # Enable horizontal scrolling
+  ),
+  caption = "First 5 Rows of Flights Data"
+)
+
+
 ```
 
 We are using the nycflights13 data which contains the flight information in New York airports in 2013. Most importantly, the data shows the departure delay time (in minutes). We will first define morning and evening flights. Morning flights are flights departing between 5:00am and 11:00am. Evening flights are flights departing from 5:00pm and 11:00pm (ex. First row, dep_time 517 means departure time is at 5:17am). We removed the flights that are not within these time ranges.
@@ -41,11 +54,25 @@ We are using the nycflights13 data which contains the flight information in New 
 Below we have the average delayed time for morning and evening flights.
 
 ```{r}
+library(knitr)
+library(kableExtra)
+
 mean_delays <- flights |>
   group_by(time_of_day) |>
   summarize(mean_delay = mean(dep_delay, na.rm = TRUE))
 
-print(mean_delays)
+mean_delays |>
+  kable(
+    caption = "Mean Departure Delay by Time of Day",
+    col.names = c("Time of Day", "Mean Delay (minutes)"),
+    align = c("l", "c")
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
+
 ```
 
 Then we calculate the observed differences.
@@ -57,10 +84,12 @@ obs_diff <- flights |>
   summarize(diff = diff(mean_delay)) |>
   pull(diff)
 
-obs_diff
-cat("Observed Difference in Mean Delays (Evening - Morning):", obs_diff, "minutes\n")
-
 ```
+
+```{r, echo = FALSE}
+cat("Observed Difference in Mean Delays (Evening - Morning):", obs_diff, "minutes\n")
+```
+
 
 \[Permutation Test\] We’ll shuffle the time labels (morning or evening) 1000 times and calculate the difference in mean delays for each permutation.
 
@@ -76,12 +105,12 @@ null_dist <- map_dbl(1:1000, ~ {
     pull(diff)
 })
 
-head(null_dist, 10)
 
 ```
 
+Let's plot the null distribution with observed difference
+
 ```{r}
-# Plot the null distribution with observed difference
 ggplot(data.frame(null_dist), aes(x = null_dist)) +
   geom_histogram(binwidth = 0.5, fill = "lightblue", color = "black") +
   geom_vline(xintercept = obs_diff, color = "red", linetype = "dashed") +
@@ -96,15 +125,27 @@ ggplot(data.frame(null_dist), aes(x = null_dist)) +
 ```{r}
 # Calculate p-value
 p_value <- mean(abs(null_dist) >= abs(obs_diff))
+
+```
+
+```{r, echo = FALSE}
 cat("P-value:", p_value, "\n")
 ```
 
-**Conclusion**
+
+**Results**
 
 The red dashed line represents the observed difference in mean delays between morning and evening flights. The histogram represents the differences in mean delays generated under the null hypothesis (shuffling the time labels).
 
 A p-value of 0 means that none of the 1000 permutations generated a difference in mean delays as extreme (or more extreme) as the observed difference. This indicates that the observed difference is highly unlikely to have occurred by chance if the null hypothesis were true.
 
-Since the p-value is 0, this provides strong evidence against the null hypothesis. You would reject the null hypothesis and conclude that the time of day (morning vs. evening) does have a significant effect on departure delays.
+Since the p-value is 0, this provides strong evidence against the null hypothesis. You would reject the null hypothesis and conclude that the time of day (morning vs. evening) may be correlated to departure delays.
 
 The visualization supports this as the red line falls outside the range of the simulated null distribution values, highlighting that the observed difference is not consistent with the null hypothesis assumption.
+
+
+**Greater Insights**
+
+So how can we interpret these results in a broader context? The current analysis is based on flights departing from NYC airports (JFK, LGA, EWR) in 2013 and data acquired under the assumption that morning and evening flights do not have missing delay information. This means the conclusion of a significant difference in mean delays applies only to NYC flights in 2013.
+
+For potential larger populations, we could generalize the results to other years in NYC. Similar patterns of delays (morning flights being less delayed than evening flights) might hold for other years if no major changes occurred in scheduling, infrastructure, or air traffic. It may also be possible to generalize to similar metropolitan hubs. NYC is one of the busiest air travel hubs in the US, so patterns observed in NYC might apply to other large cities with comparable air traffic and flight schedules, such as Chicago (ORD, MDW), Los Angeles (LAX), or Atlanta (ATL). However, generalization should be done cautiously and supported by additional evidence. Moreover, there may be limitations to generalization in the sense that regional factors may come into play. NYC has unique air traffic patterns due to its size, location, and volume of international and domestic flights. Other cities may not share these characteristics.
