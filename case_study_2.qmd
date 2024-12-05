@@ -15,7 +15,7 @@ execute:
 
 [Original Data Source](https://www.kaggle.com/datasets/evangower/premier-league-match-data)
 
-Objective of the Analysis: Which referee gave out the most yellow cards to Arsenal during the 2021-2022 season?
+**Objective of the Analysis: Which referee gave out the most yellow cards to Arsenal during the 2021-2022 season?**
 
 Refereeing decisions play huge outcome in a football match. In fact, fans and analysts alike do pay enormous attention to the designated referee for each fixture. As a lifelong Arsenal fan, I wanted to find out which referees tend to be harsher on Arsenal.
 
@@ -44,6 +44,8 @@ arsenal_yellow_by_referee <- soccer |>
 
 ```
 
+
+### 1. Which referees handed out the most yellow cards?
 ```{r, fig.height=5, fig.width=6}
 library(ggplot2)
 
@@ -65,3 +67,42 @@ ggplot(arsenal_yellow_by_referee, aes(x = reorder(Referee, -Total_Yellow_Cards),
 ```
 
 The bar chart represents the total number of yellow cards each referee has given to Arsenal. Craig Pawson handed out the most yellow cards to Arsenal, with 9 cards given.
+
+
+### 2. Did Arsenal receive more yellow cards at home or away?
+
+```{r}
+library(ggplot2)
+library(dplyr)
+
+# Summarize total yellow cards at home and away
+yellow_cards_summary <- arsenal_yellow_by_referee %>%
+  summarise(
+    Home = sum(Home_Yellow_Cards),
+    Away = sum(Away_Yellow_Cards)
+  ) %>%
+  pivot_longer(cols = everything(), names_to = "Location", values_to = "Total_Yellow_Cards")
+
+# Create the bar chart
+ggplot(yellow_cards_summary, aes(x = Location, y = Total_Yellow_Cards, fill = Location)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  geom_text(aes(label = Total_Yellow_Cards), vjust = -0.2, size = 5) + # Adjust vertical position of text
+  labs(
+    title = "Yellow Cards Arsenal Received by Location",
+    x = "Location",
+    y = "Total Yellow Cards"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.margin = margin(10, 10, 20, 10), # Add extra space below and above the plot
+    text = element_text(size = 14),
+    legend.position = "none"
+  ) +
+  ylim(0, max(yellow_cards_summary$Total_Yellow_Cards) + 5) # Increase y-axis limit to prevent clipping
+
+
+```
+
+This study offers insight into if Arsenal experienced home advantage in referee decisions. Many fans assume that referees tend to be more lenient toward home teams. This may manifest the most in referee decisions for making disciplinary actions. The bar chart shows the number of yellow cards Arsenal received depending on match venue.
+
+Interestingly, Arsenal received 29 yellow cards at away matches and 31 in home matches. This goes against common logic. Although not conclusive, home advantage did not work in Arsenal's favor.
