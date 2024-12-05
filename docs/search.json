@@ -184,9 +184,9 @@
   {
     "objectID": "Project_5.html#overview-of-project",
     "href": "Project_5.html#overview-of-project",
-    "title": "Movies on Netflix",
+    "title": "Flight Delays",
     "section": "Overview of Project",
-    "text": "Overview of Project\nAnalyze some interesting trends in Netflix movies as of 2019\nVery interesting tidytuesday dataset on Netflix movies and TV series."
+    "text": "Overview of Project\nAre departure delays significantly different between morning and evening flights?\n\nFlight delays are vey common"
   },
   {
     "objectID": "Project_5.html#most-popular-words-in-movie-titles",
@@ -201,5 +201,33 @@
     "title": "Movies on Netflix",
     "section": "When is it available on Netflix?",
     "text": "When is it available on Netflix?"
+  },
+  {
+    "objectID": "Project_5.html#nycflight2013-data",
+    "href": "Project_5.html#nycflight2013-data",
+    "title": "Flight Delays",
+    "section": "nycflight2013 Data",
+    "text": "nycflight2013 Data\n\n\n\n\n\n\nMornings: 5:00am ~ 11:00am\nEvenings: 5:00pm ~ 11:00pm"
+  },
+  {
+    "objectID": "Project_5.html#observed-difference-in-mean-delay",
+    "href": "Project_5.html#observed-difference-in-mean-delay",
+    "title": "Flight Delays",
+    "section": "Observed Difference in Mean Delay",
+    "text": "Observed Difference in Mean Delay\n\n\n\nMean Departure Delay by Time of Day\n\n\nTime of Day\nMean Delay (minutes)\n\n\n\n\nevening\n22.729753\n\n\nmorning\n3.492098\n\n\n\n\n\n\n\n\n\nObserved Difference in Mean Delays (Evening - Morning): -19.23765 minutes"
+  },
+  {
+    "objectID": "Project_5.html#permutation-test-and-results",
+    "href": "Project_5.html#permutation-test-and-results",
+    "title": "Flight Delays",
+    "section": "Permutation Test and Results",
+    "text": "Permutation Test and Results\n\n\n\nP-value: 0"
+  },
+  {
+    "objectID": "Project_5.html#conclusion",
+    "href": "Project_5.html#conclusion",
+    "title": "Flight Delays",
+    "section": "Conclusion",
+    "text": "Conclusion\nObserved difference is highly unlikely to have occurred by chance if the null hypothesis were true.\nStrong evidence to reject null hypothesis: red line falls outside the range of the simulated null distribution values.\nPotential generalization into other mega airports in US:\n\nChicago (ORD, MDW)\nLos Angeles (LAX)\nAtlanta (ATL)"
   }
 ]

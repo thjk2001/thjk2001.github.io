@@ -19,7 +19,145 @@ execute:
 
 
 
+Are departure delays significantly different between morning and evening flights?
+
+```{r, echo = FALSE}
+library(nycflights13)
+library(dplyr)
+library(purrr)
+library(ggplot2)
+library(DT)
+```
+
+
+![Flight delays are vey common](https://media.cntraveler.com/photos/57b1ddf87443947d28477866/master/pass/GettyImages-93466101.jpg)
 
 
 
 
+## nycflight2013 Data
+
+```{r, echo = FALSE}
+# Create a new table from original to add a new column indicator morning or evening flight
+flights <- nycflights13::flights |>
+  filter(!is.na(dep_delay)) |>
+  mutate(time_of_day = case_when(
+    hour >= 5 & hour < 11 ~ "morning",
+    hour >= 17 & hour < 23 ~ "evening",
+    TRUE ~ "other"
+  )) |>
+  filter(time_of_day != "other")  # Exclude flights that are not in the morning or evening
+
+
+# Display the first 5 rows as an interactive table
+datatable(
+  flights[1:5, ],  # Select the first 5 rows
+  options = list(
+    pageLength = 5,      # Display 5 rows per page
+    dom = 't',           # Show only the table (no search box, etc.)
+    scrollX = TRUE       # Enable horizontal scrolling
+  ),
+  caption = "First 5 Rows of Flights Data"
+)
+
+```
+
+
+Mornings: 5:00am ~ 11:00am
+
+Evenings: 5:00pm ~ 11:00pm
+
+
+## Observed Difference in Mean Delay
+
+
+
+```{r, echo = FALSE}
+library(knitr)
+library(kableExtra)
+
+mean_delays <- flights |>
+  group_by(time_of_day) |>
+  summarize(mean_delay = mean(dep_delay, na.rm = TRUE))
+
+mean_delays |>
+  kable(
+    caption = "Mean Departure Delay by Time of Day",
+    col.names = c("Time of Day", "Mean Delay (minutes)"),
+    align = c("l", "c")
+  ) |>
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
+```
+
+
+```{r, echo = FALSE}
+obs_diff <- flights |>
+  group_by(time_of_day) |>
+  summarize(mean_delay = mean(dep_delay)) |>
+  summarize(diff = diff(mean_delay)) |>
+  pull(diff)
+
+```
+
+
+
+```{r, echo = FALSE}
+cat("Observed Difference in Mean Delays (Evening - Morning):", obs_diff, "minutes\n")
+```
+
+
+## Permutation Test and Results
+
+```{r, echo = FALSE}
+set.seed(47)
+
+null_dist <- map_dbl(1:1000, ~ {
+  flights |> 
+    mutate(shuffled_time = sample(time_of_day)) |> 
+    group_by(shuffled_time) |> 
+    summarize(mean_delay = mean(dep_delay), .groups = "drop") |> 
+    summarize(diff = diff(mean_delay)) |> 
+    pull(diff)
+})
+
+
+```
+
+```{r, echo = FALSE}
+ggplot(data.frame(null_dist), aes(x = null_dist)) +
+  geom_histogram(binwidth = 0.5, fill = "lightblue", color = "black") +
+  geom_vline(xintercept = obs_diff, color = "red", linetype = "dashed") +
+  labs(
+    title = "Permutation Test: Morning vs Evening Delays",
+    x = "Difference in Mean Delays",
+    y = "Frequency"
+  )
+
+```
+
+```{r, echo = FALSE}
+# Calculate p-value
+p_value <- mean(abs(null_dist) >= abs(obs_diff))
+
+```
+
+
+```{r, echo = FALSE}
+cat("P-value:", p_value, "\n")
+```
+
+## Conclusion
+
+Observed difference is highly unlikely to have occurred by chance if the null hypothesis were true.
+
+Strong evidence to reject null hypothesis: red line falls outside the range of the simulated null distribution values.
+
+Potential generalization into other mega airports in US:
+
++ Chicago (ORD, MDW)
++ Los Angeles (LAX)
++ Atlanta (ATL)
