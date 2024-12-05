@@ -19,6 +19,8 @@ execute:
 
 **Objective:** Usually it is the Olympic athletes that receive the fame. However, at the end of the day they each represent their country with pride. Let's find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). So, which countries have produced the best talents?
 
+This analysis utilizes a public dataset on Kaggle compiled by RGriffen. This is a historical dataset on the modern Olympic Games, including all the Games from Athens 1896 to Rio 2016. It was compiled from scrapping data from Sport Reference on May 2018.
+
 ```{r}
 tuesdata <- tidytuesdayR::tt_load('2024-08-06')
 
@@ -30,14 +32,14 @@ library(tidyverse)
 library(knitr)
 library(kableExtra)
 
-
+# Treating Soviet Union and Russia as one country and representing it as USSR/Russia
 olympics <- olympics |>
   mutate(team = case_when(
     team %in% c("Soviet Union", "Russia") ~ "USSR/Russia",
     TRUE ~ team
   ))
 
-
+#Obtaining best athletes
 top_athletes <- olympics |>
   filter(!is.na(medal)) |>
   group_by(name, team) |>
@@ -45,7 +47,7 @@ top_athletes <- olympics |>
   arrange(desc(total_medals)) |>
   slice(1:10)
 
-
+# Create a clean table for Top 10 Athletes
 top_athletes |>
   kable(
     caption = "Top 10 Athletes by Total Medals (USSR/Russia Combined)",
@@ -63,7 +65,7 @@ top_nations <- top_athletes |>
   summarise(count = n(), .groups = "drop") |>
   arrange(desc(count))
 
-
+# Create clean table for Top Nations
 top_nations |>
   kable(
     caption = "Top Nations by Number of Top Athletes (USSR/Russia Combined)",
@@ -86,6 +88,7 @@ As for most successful athletes, Michael Phelps by far has won the most medals (
 ```{r}
 library(ggplot2)
 
+# Creating a bar chart
 ggplot(top_nations, aes(x = reorder(team, -count), y = count)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   labs(title = "Number of Top 10 Athletes by Country",

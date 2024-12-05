@@ -38,15 +38,17 @@ library(tidyverse)
 ### 1.  Who are the actors with the most movie appearances? Let's find the top 5 actors by the number of appearances.
 
 ```{r}
+# We want to look at actors for movies
 actor_count <- netflix |>
   filter(type == "Movie", !is.na(cast)) |> 
   separate_rows(cast, sep = ",\\s*") |> 
   count(cast, sort = TRUE)
 
+# Top 5 actors
 top_5_actors <- actor_count |>
   slice_head(n = 5) 
 
-
+# Creating a bar chart but having the names on the vertical axis since they are long
 ggplot(top_5_actors, aes(x = reorder(cast, n), y = n)) +
   geom_bar(stat = "identity", fill = "steelblue") +
   coord_flip() +  
@@ -64,12 +66,13 @@ Interesting, I actually do not know any of these actors/actresses. Upon some res
 As a side analysis, let's find out which countries produced the most number of movies?
 
 ```{r}
-
+# Counting the movies by the countru they were produced
 country_count_movies <- netflix |>
   filter(type == "Movie", !is.na(country)) |>  
   separate_rows(country, sep = ",\\s*") |>  
   count(country, sort = TRUE)  
 
+# Finding the top 5 countries
 top_5_countries <- country_count_movies |>
   slice_head(n = 5)  
 
@@ -90,7 +93,7 @@ Unsurprisingly, the US has produced the most Netflix movies. This makes sense gi
 
 ### 2.  Most popular words in movie titles:
 
-We have excluded articles, pronouns, prepositions and any common stop words.
+I have always wondered which words are commonly used in movie titles. We have excluded articles, pronouns, prepositions and any common stop words.
 
 ```{r}
 library(knitr)
@@ -107,7 +110,7 @@ stop_words <- c("a", "an", "the", "and", "in",
                 "us", "we", "that", "this", "these",
                 "those", "I", "from", "i", "at", "")
 
-# Step 1: Filter and preprocess the titles
+# Filter and preprocess the titles
 word_count <- netflix |>
   subset(type == "Movie" & !is.na(title)) |>
   transform(clean_title = str_remove_all(title, "[^A-Za-z\\s]")) |>
@@ -117,11 +120,11 @@ word_count <- netflix |>
   table() |>
   as.data.frame()
 
-# Step 2: Sort and rename columns
+# Sort and rename columns
 word_count <- word_count[order(-word_count$Freq), ]
 colnames(word_count) <- c("Word", "Frequency")
 
-# Step 3: Display top 10 words as a formatted table
+# Display top 10 words as a formatted table
 word_count |>
   head(10) |>
   kable(
@@ -141,12 +144,13 @@ word_count |>
 
 Love and Christmas are the top two most common words. These results do makes sense as these are  popular topics.
 
+
 ### 3. Steven Spielberg
 
 The most commercially successful filmmaker in the history of Hollywood is Steven Spielberg. Steven Spielberg is the creator of many of the most successful franchises and stand-alone films. They include the *Indiana Jones* series, the *Jurassic Park* series, *Saving Private Ryan*, and *Jaws*. Let's figure out which of his movies are on Netflix.
 
 ```{r}
-
+# Filter for Spielberg movies
 spielberg_movies <- netflix |>
   filter(type == "Movie", str_detect(director, "Steven Spielberg"))
 
@@ -189,16 +193,19 @@ netflix_movies <- netflix |>
     release_year = as.numeric(release_year)
   )
 
+# Extract the Year from the date_added Column
 netflix_movies <- netflix_movies |>
   transform(
     added_year = year(date_added)
   )
 
+# Calculate Time Difference in Years
 netflix_movies <- netflix_movies |>
   transform(
     time_diff_years = added_year - release_year
   )
 
+# Exclude movies produced before 2007
 netflix_movies_filtered <- netflix_movies |>
   subset(!is.na(time_diff_years) & time_diff_years >= 0 & release_year >= 2007)
 
@@ -297,7 +304,7 @@ ggplot(average_time_by_rating_table, aes(x = reorder(rating, -time_diff_years), 
 
 
 ```
-
+This is a bar chart of the different averages computed for each movie rating type.
 
 Unrated movies (UR) exhibited the longest wait time for the movie to be uploaded on Netflix. This was followed by PG-13 rated movies and PG rated movies. UR, PG-13, PG, R, G, TV-14, and NR rated movies all took longer than the average time for all movies.
 

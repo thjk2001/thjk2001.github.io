@@ -1,10 +1,15 @@
 ---
 title: "Project 5: Overview of DS2 - FA2025"
 description: |
-  Presentation of Project Revisions
+  Presentation of Project Revisions (Focus on Project 2)
 author: Jack Kim
 date: December 9, 2024
-format: revealjs
+format:
+  revealjs:
+    scrollable: true
+    slide-number: true
+    show-slide-number: all
+    embed-resources: true
 execute:
   echo: true
   warning: false
@@ -12,15 +17,11 @@ execute:
 ---
 
 
-## Project 2 Updates
+## Recap of Project 2
 
+Analyze some interesting trends in Netflix movies as of 2019
 
-
-
-
-## Project 3 Updates
-
-
+Very interesting tidytuesday dataset on Netflix movies and TV series.
 
 
 

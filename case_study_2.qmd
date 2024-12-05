@@ -19,6 +19,8 @@ execute:
 
 **Objective:** Which referees gave out the most yellow cards to Arsenal during the 2021-2022 season?
 
+The dataset includes teams, referee, and stats by home and away side such as fouls, shots, cards, and many more. This dataset was compiled from the official Premier League website for the 2021-2022 season. This data was scrapped by Evan Gower.
+
 Refereeing decisions play huge outcome in a football match. In fact, fans and analysts alike do pay enormous attention to the designated referee for each fixture. As a lifelong Arsenal fan, I wanted to find out which referees tend to be harsher on Arsenal.
 
 ```{r}
@@ -34,6 +36,7 @@ soccer <- tuesdata$soccer
 ```{r}
 library(tidyverse)
 
+# Creating a comprehensive table for Disciplinary actions data
 arsenal_yellow_by_referee <- soccer |>
   filter(HomeTeam == "Arsenal" | AwayTeam == "Arsenal") |>
   group_by(Referee) |>
@@ -51,6 +54,7 @@ arsenal_yellow_by_referee <- soccer |>
 ```{r, fig.height=5, fig.width=6}
 library(ggplot2)
 
+# Bar char to represent yellow cards by referees
 ggplot(arsenal_yellow_by_referee, aes(x = reorder(Referee, -Total_Yellow_Cards), y = Total_Yellow_Cards)) +
   geom_bar(stat = "identity", fill = "yellow") +
   geom_text(aes(label = Total_Yellow_Cards), vjust = -0.5, size = 4) +
