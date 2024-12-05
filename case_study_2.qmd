@@ -11,11 +11,13 @@ execute:
   message: false
 ---
 
+## Referee Decisions for Arsenal in 2021-2022 Season
+
 [TidyTuesday Reference](https://github.com/rfordatascience/tidytuesday/tree/master/data/2023/2023-04-04)
 
 [Original Data Source](https://www.kaggle.com/datasets/evangower/premier-league-match-data)
 
-**Objective of the Analysis: Which referee gave out the most yellow cards to Arsenal during the 2021-2022 season?**
+**Objective:** Which referees gave out the most yellow cards to Arsenal during the 2021-2022 season?
 
 Refereeing decisions play huge outcome in a football match. In fact, fans and analysts alike do pay enormous attention to the designated referee for each fixture. As a lifelong Arsenal fan, I wanted to find out which referees tend to be harsher on Arsenal.
 

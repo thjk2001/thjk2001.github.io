@@ -11,11 +11,13 @@ execute:
   message: false
 ---
 
+## Successful Countries and Athletes in the Olympics
+
 [TidyTuesday Reference](https://github.com/rfordatascience/tidytuesday/tree/master/data/2024/2024-08-06)
 
 [Original Data Source](https://www.kaggle.com/datasets/heesoo37/120-years-of-olympic-history-athletes-and-results/)
 
-Objective: Usually it is the Olympic athletes that receive the fame. However, at the end of the day they each represent their country with pride. Let's find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). So, which countries have produced the best talents?
+**Objective:** Usually it is the Olympic athletes that receive the fame. However, at the end of the day they each represent their country with pride. Let's find out which nations are represented the most in the top 10 most successful athlete list (measured by medal count). So, which countries have produced the best talents?
 
 ```{r}
 tuesdata <- tidytuesdayR::tt_load('2024-08-06')
