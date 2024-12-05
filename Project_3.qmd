@@ -1,5 +1,5 @@
 ---
-title: "Project 3: NYC Flights Analysis"
+title: "NYC Flights Analysis"
 description: |
   Morning vs. Evening Departure Delays
 author: Jack Kim

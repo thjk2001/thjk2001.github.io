@@ -1,5 +1,5 @@
 ---
-title: "Case Analysis 2: Premier League 2021-2022"
+title: "Arsenal in Premier League 2021-2022"
 description: |
   Referees in Arsenal's Fixtures
 author: Jack Kim

@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2024-11-08">
 <meta name="description" content="Morning vs.&nbsp;Evening Departure Delays">
 
-<title>Project 3: NYC Flights Analysis – Taehwan (Jack) Kim</title>
+<title>NYC Flights Analysis – Taehwan (Jack) Kim</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -146,40 +146,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data-viz" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Data Viz</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-data-analysis" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Data Analysis</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-data-viz">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-data-analysis">    
         <li>
     <a class="dropdown-item" href="./case_study_1.html">
- <span class="dropdown-text">Case 1</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="./case_study_2.html">
- <span class="dropdown-text">Case 2</span></a>
+ <span class="dropdown-text">Success in Olympics</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./case_study_3.html">
- <span class="dropdown-text">Case 3</span></a>
+ <span class="dropdown-text">Netflix Movies</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Project_3.html">
+ <span class="dropdown-text">NYC Flights Analysis</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Project_4.html">
+ <span class="dropdown-text">Wideband Acoustic Immittance Analysis</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-mini-projects" role="link" data-bs-toggle="dropdown" aria-expanded="false">
- <span class="menu-text">Mini Projects</span>
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sports" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Sports</span>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="nav-menu-mini-projects">    
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-sports">    
         <li>
-    <a class="dropdown-item" href="./Project_3.html">
- <span class="dropdown-text">Project 3</span></a>
+    <a class="dropdown-item" href="./case_study_2.html">
+ <span class="dropdown-text">Referee Decisions in Soccer</span></a>
   </li>  
-        <li>
-    <a class="dropdown-item" href="./Project_4.html">
- <span class="dropdown-text">Project 4</span></a>
-  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-presentations" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Presentations</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-presentations">    
         <li>
     <a class="dropdown-item" href="./Project_5.html">
- <span class="dropdown-text">Project 5</span></a>
+ <span class="dropdown-text">Insights into Netflix Movies</span></a>
   </li>  
     </ul>
   </li>
@@ -208,7 +215,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Project 3: NYC Flights Analysis</h1>
+<h1 class="title">NYC Flights Analysis</h1>
 </div>
 
 <div>
@@ -275,8 +282,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"First 5 Rows of Flights Data"</span></span>
 <span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<div class="datatables html-widget html-fill-item" id="htmlwidget-1b64d6945f612d3bd7ee" style="width:100%;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-1b64d6945f612d3bd7ee">{"x":{"filter":"none","vertical":false,"caption":"<caption>First 5 Rows of Flights Data<\/caption>","data":[["1","2","3","4","5"],[2013,2013,2013,2013,2013],[1,1,1,1,1],[1,1,1,1,1],[517,533,542,544,554],[515,529,540,545,600],[2,4,2,-1,-6],[830,850,923,1004,812],[819,830,850,1022,837],[11,20,33,-18,-25],["UA","UA","AA","B6","DL"],[1545,1714,1141,725,461],["N14228","N24211","N619AA","N804JB","N668DN"],["EWR","LGA","JFK","JFK","LGA"],["IAH","IAH","MIA","BQN","ATL"],[227,227,160,183,116],[1400,1416,1089,1576,762],[5,5,5,5,6],[15,29,40,45,0],["2013-01-01T10:00:00Z","2013-01-01T10:00:00Z","2013-01-01T10:00:00Z","2013-01-01T10:00:00Z","2013-01-01T11:00:00Z"],["morning","morning","morning","morning","morning"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>year<\/th>\n      <th>month<\/th>\n      <th>day<\/th>\n      <th>dep_time<\/th>\n      <th>sched_dep_time<\/th>\n      <th>dep_delay<\/th>\n      <th>arr_time<\/th>\n      <th>sched_arr_time<\/th>\n      <th>arr_delay<\/th>\n      <th>carrier<\/th>\n      <th>flight<\/th>\n      <th>tailnum<\/th>\n      <th>origin<\/th>\n      <th>dest<\/th>\n      <th>air_time<\/th>\n      <th>distance<\/th>\n      <th>hour<\/th>\n      <th>minute<\/th>\n      <th>time_hour<\/th>\n      <th>time_of_day<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"dom":"t","scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8,9,11,15,16,17,18]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"year","targets":1},{"name":"month","targets":2},{"name":"day","targets":3},{"name":"dep_time","targets":4},{"name":"sched_dep_time","targets":5},{"name":"dep_delay","targets":6},{"name":"arr_time","targets":7},{"name":"sched_arr_time","targets":8},{"name":"arr_delay","targets":9},{"name":"carrier","targets":10},{"name":"flight","targets":11},{"name":"tailnum","targets":12},{"name":"origin","targets":13},{"name":"dest","targets":14},{"name":"air_time","targets":15},{"name":"distance","targets":16},{"name":"hour","targets":17},{"name":"minute","targets":18},{"name":"time_hour","targets":19},{"name":"time_of_day","targets":20}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+<div class="datatables html-widget html-fill-item" id="htmlwidget-3f7f05bf81fe1c74da6e" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-3f7f05bf81fe1c74da6e">{"x":{"filter":"none","vertical":false,"caption":"<caption>First 5 Rows of Flights Data<\/caption>","data":[["1","2","3","4","5"],[2013,2013,2013,2013,2013],[1,1,1,1,1],[1,1,1,1,1],[517,533,542,544,554],[515,529,540,545,600],[2,4,2,-1,-6],[830,850,923,1004,812],[819,830,850,1022,837],[11,20,33,-18,-25],["UA","UA","AA","B6","DL"],[1545,1714,1141,725,461],["N14228","N24211","N619AA","N804JB","N668DN"],["EWR","LGA","JFK","JFK","LGA"],["IAH","IAH","MIA","BQN","ATL"],[227,227,160,183,116],[1400,1416,1089,1576,762],[5,5,5,5,6],[15,29,40,45,0],["2013-01-01T10:00:00Z","2013-01-01T10:00:00Z","2013-01-01T10:00:00Z","2013-01-01T10:00:00Z","2013-01-01T11:00:00Z"],["morning","morning","morning","morning","morning"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>year<\/th>\n      <th>month<\/th>\n      <th>day<\/th>\n      <th>dep_time<\/th>\n      <th>sched_dep_time<\/th>\n      <th>dep_delay<\/th>\n      <th>arr_time<\/th>\n      <th>sched_arr_time<\/th>\n      <th>arr_delay<\/th>\n      <th>carrier<\/th>\n      <th>flight<\/th>\n      <th>tailnum<\/th>\n      <th>origin<\/th>\n      <th>dest<\/th>\n      <th>air_time<\/th>\n      <th>distance<\/th>\n      <th>hour<\/th>\n      <th>minute<\/th>\n      <th>time_hour<\/th>\n      <th>time_of_day<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":5,"dom":"t","scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,3,4,5,6,7,8,9,11,15,16,17,18]},{"orderable":false,"targets":0},{"name":" ","targets":0},{"name":"year","targets":1},{"name":"month","targets":2},{"name":"day","targets":3},{"name":"dep_time","targets":4},{"name":"sched_dep_time","targets":5},{"name":"dep_delay","targets":6},{"name":"arr_time","targets":7},{"name":"sched_arr_time","targets":8},{"name":"arr_delay","targets":9},{"name":"carrier","targets":10},{"name":"flight","targets":11},{"name":"tailnum","targets":12},{"name":"origin","targets":13},{"name":"dest","targets":14},{"name":"air_time","targets":15},{"name":"distance","targets":16},{"name":"hour","targets":17},{"name":"minute","targets":18},{"name":"time_hour","targets":19},{"name":"time_of_day","targets":20}],"order":[],"autoWidth":false,"orderClasses":false,"lengthMenu":[5,10,25,50,100]}},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <p>We are using the nycflights13 data which contains the flight information in New York airports in 2013. Most importantly, the data shows the departure delay time (in minutes). We will first define morning and evening flights. Morning flights are flights departing between 5:00am and 11:00am. Evening flights are flights departing from 5:00pm and 11:00pm (ex. First row, dep_time 517 means departure time is at 5:17am). We removed the flights that are not within these time ranges.</p>

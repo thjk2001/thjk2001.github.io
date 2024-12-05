@@ -1,5 +1,5 @@
 ---
-title: "Case Analysis 3: Netflix Movies"
+title: "Netflix Movies"
 description: |
   Let's analyze Netflix data
 author: Jack Kim

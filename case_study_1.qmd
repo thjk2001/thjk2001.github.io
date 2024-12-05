@@ -1,5 +1,5 @@
 ---
-title: "Case Analysis 1: Olympics"
+title: "Success in Olympics"
 description: |
   Nations that Produced the Most Talented Athletes
 author: Jack Kim

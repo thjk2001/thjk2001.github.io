@@ -1,7 +1,5 @@
 ---
-title: "Project 4: SQL"
-description: |
-  Wideband Acoustic Immittance (WAI) Database
+title: "Wideband Acoustic Immittance Analysis using SQL"
 author: Jack Kim
 date: November 26, 2024
 format: html

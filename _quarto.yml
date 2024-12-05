@@ -10,22 +10,25 @@ website:
         text: Home
       - href: about.qmd
         text: About
-      - text: Data Viz
+      - text: Data Analysis
         menu:
           - href: case_study_1.qmd
-            text: Case 1
-          - href: case_study_2.qmd
-            text: Case 2
+            text: Success in Olympics
           - href: case_study_3.qmd
-            text: Case 3
-      - text: Mini Projects
-        menu:
+            text: Netflix Movies
           - href: Project_3.qmd
-            text: Project 3
+            text: NYC Flights Analysis
           - href: Project_4.qmd
-            text: Project 4
+            text: Wideband Acoustic Immittance Analysis
+      - text: Sports
+        menu:
+          - href: case_study_2.qmd
+            text: Referee Decisions in Soccer
+      - text: Presentations
+        menu: 
           - href: Project_5.qmd
-            text: Project 5
+            text: Insights into Netflix Movies
+      
         
 format:
   html:
