@@ -1,7 +1,7 @@
 ---
 title: "Project 5: Overview of DS2 - FA2025"
 description: |
-  Nations that Produced the Most Talented Athletes
+  Presentation of Project Revisions
 author: Jack Kim
 date: December 9, 2024
 format: html
