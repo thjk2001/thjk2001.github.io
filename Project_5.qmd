@@ -1,5 +1,5 @@
 ---
-title: "Project 5: Overview of DS2 - FA2025"
+title: "Movies on Netflix"
 description: |
   Presentation of Project Revisions (Focus on Project 2)
 author: Jack Kim
@@ -17,7 +17,7 @@ execute:
 ---
 
 
-## Recap of Project 2
+## Overview of Project
 
 Analyze some interesting trends in Netflix movies as of 2019
 
@@ -25,6 +25,10 @@ Very interesting tidytuesday dataset on Netflix movies and TV series.
 
 
 
+## Most Popular Words in Movie Titles
+
+
+## When is it available on Netflix?
 
 
 
