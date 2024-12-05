@@ -4,9 +4,12 @@ description: |
   Presentation of Project Revisions
 author: Jack Kim
 date: December 9, 2024
-format: html
+format: revealjs
 execute:
-  echo: false
+  echo: true
   warning: false
   message: false
 ---
+
+## Project 1 Updates
+
