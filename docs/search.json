@@ -214,7 +214,7 @@
     "href": "Project_5.html#observed-difference-in-mean-delay",
     "title": "Flight Delays",
     "section": "Observed Difference in Mean Delay",
-    "text": "Observed Difference in Mean Delay\n\n\n\nMean Departure Delay by Time of Day\n\n\nTime of Day\nMean Delay (minutes)\n\n\n\n\nevening\n22.729753\n\n\nmorning\n3.492098\n\n\n\n\n\n\n\n\n\nObserved Difference in Mean Delays (Evening - Morning): -19.23765 minutes"
+    "text": "Observed Difference in Mean Delay\n\n\n\nMean Departure Delay by Time of Day\n\n\nTime of Day\nMean Delay (minutes)\n\n\n\n\nevening\n22.729753\n\n\nmorning\n3.492098\n\n\n\n\n\n\n\n\n\nObserved Difference in Mean Delays (Morning - Evening): -19.23765 minutes"
   },
   {
     "objectID": "Project_5.html#permutation-test-and-results",

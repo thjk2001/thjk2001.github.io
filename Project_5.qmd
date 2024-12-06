@@ -106,7 +106,7 @@ obs_diff <- flights |>
 
 
 ```{r, echo = FALSE}
-cat("Observed Difference in Mean Delays (Evening - Morning):", obs_diff, "minutes\n")
+cat("Observed Difference in Mean Delays (Morning - Evening):", obs_diff, "minutes\n")
 ```
 
 
