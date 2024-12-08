@@ -14,6 +14,9 @@ execute:
 
 **Objective:** In this analysis, I will investigate whether there is a significant difference in departure delays between morning and evening flights using data from the nycflights13 package. This data set contains all the relevant information of a particular flight schedule. To perform this analysis, I will perform a permutation test, where I will shuffle the time-of-day labels (morning/evening) and repeatedly calculate the difference in mean departure delays. This will help simulate the null hypothesis, which assumes that the time of day has no statistical significance on departure delays. By comparing the observed difference in delays to this simulated distribution, I will assess the statistical significance of the observed difference.
 
+
+### Experimental Design
+
 \[Null Hypothesis\] There is no difference in the mean departure delays between morning flights and evening flights.
 
 ```{r}
@@ -164,6 +167,8 @@ p_value <- mean(abs(null_dist) >= abs(obs_diff))
 cat("P-value:", p_value, "\n")
 ```
 
+
+### Discussion of Results
 
 **Results**
 
