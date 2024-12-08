@@ -19,7 +19,9 @@ Background: The WAI database is a comprehensive online database for normative ad
 
 ### 1. Repliate Figure 1
 
-The objective is to recreate Figure 1, which represents mean absorbance data from select 12 publications in the Wideband Acoustic Immittance (WAI) database, showing how absorbance varies with frequency across different studies.
+[Original Data Source](https://pmc.ncbi.nlm.nih.gov/articles/PMC7093226/)
+
+The objective is to recreate Figure 1, which represents mean absorbance data from select 12 publications in the Wideband Acoustic Immittance (WAI) database, showing how absorbance varies with frequency across different studies. Susan E. Voss published the study and the supporting Figure 1.
 
 Starter Code to establish connection to the WAI database.
 
@@ -54,34 +56,36 @@ The following is the detailed process:
 + Groups Data: organizes results by study, frequency, instrument, and year.
 
 
+
 ```{sql, connection=con_wai, output.var="data"}
 -- Select the relevant columns and compute aggregated values
 SELECT 
-    Measurements.Identifier, 
-    PI_Info.AuthorsShortList, 
-    Measurements.Instrument, 
-    Measurements.Frequency, 
-    AVG(Measurements.Absorbance) AS MeanAbsorbance, 
--- Create a descriptive label combining author names, year, and sample size    
+    Measurements.Identifier,
+    PI_Info.AuthorsShortList,
+    Measurements.Instrument,
+    Measurements.Frequency,
+    AVG(Measurements.Absorbance) AS MeanAbsorbance,
+    -- Create a descriptive label combining author names, year, sample size, and instrument type
     CONCAT(
-        PI_Info.AuthorsShortList, ' (', PI_Info.Year, ') N=',
-        COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear))
+        PI_Info.AuthorsShortList, ' (', PI_Info.Year, ') N=', 
+        COUNT(DISTINCT CONCAT(Measurements.SubjectNumber, Measurements.Ear)), 
+        '; ', Measurements.Instrument
     ) AS Legend_Label
 FROM Measurements
 -- Join the PI_Info table to enrich the data with author and year information
-JOIN PI_Info 
--- Match rows based on the shared "Identifier" column    
-    ON Measurements.Identifier = PI_Info.Identifier 
+JOIN PI_Info
+ON Measurements.Identifier = PI_Info.Identifier
 WHERE Measurements.Identifier IN (
-    'Abur_2014', 'Feeney_2017', 'Groon_2015', 'Lewis_2015', 
-    'Liu_2008', 'Rosowski_2012', 'Shahnaz_2006', 'Shaver_2013', 
+    'Abur_2014', 'Feeney_2017', 'Groon_2015', 'Lewis_2015',
+    'Liu_2008', 'Rosowski_2012', 'Shahnaz_2006', 'Shaver_2013',
     'Sun_2016', 'Voss_1994', 'Voss_2010', 'Werner_2010'
 )
+AND Measurements.Frequency >= 200 -- Filter for Frequency >= 200 Hz
 GROUP BY 
-    Measurements.Identifier, 
-    Measurements.Instrument, 
-    PI_Info.AuthorsShortList, 
-    Measurements.Frequency, 
+    Measurements.Identifier,
+    Measurements.Instrument,
+    PI_Info.AuthorsShortList,
+    Measurements.Frequency,
     PI_Info.Year;
 
 
@@ -91,16 +95,8 @@ GROUP BY
 
 ```{r, fig.height=8, fig.width=8}
 
-
-data$Frequency <- as.numeric(data$Frequency)
-
-# Filter the data to include only rows where Frequency is 200 Hz or higher
-data <- data %>%
-  filter(Frequency >= 200)
-
 # Create the plot
 ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = Legend_Label)) +
-# Adds lines representing Mean Absorbance for each Legend_Label group  
   geom_line(size = 0.8) + 
   labs(
     title = "Mean absorbance from publications in WAI database",
@@ -109,20 +105,19 @@ ggplot(data, aes(x = Frequency, y = MeanAbsorbance, color = Legend_Label)) +
   ) +
   theme_minimal() +
   scale_x_continuous(
-# Transforms the x-axis to a logarithmic scale for better visualization of frequency values.    
     trans = "log10",
-# Sets custom tick marks on the x-axis    
     breaks = c(200, 400, 600, 800, 1000, 2000, 4000, 6000, 8000),
-# Labels for the tick marks
     labels = c("200", "400", "600", "800", "1000", "2000", "4000", "6000", "8000"),
-# Restricts the x-axis range to frequencies between 200 and 8000 Hz
     limits = c(200, 8000)
   ) +
   scale_y_continuous(
-# Restricts the y-axis range to values between 0 and 1    
+    breaks = seq(0, 1, by = 0.1), # Adjusts y-axis values to increment by 0.1
+    labels = scales::label_number(accuracy = 0.1), # Ensures consistent number formatting
     limits = c(0, 1),
-# Removes additional padding from the y-axis range    
     expand = c(0, 0)
+  ) +
+  theme(
+    legend.title = element_blank() # Removes the legend title
   )
 
 
@@ -138,6 +133,8 @@ Most studies show increasing absorbance from 200 Hz to approximately 1000-2000 H
 
 
 ### 2. Deeper Dive into Feeney et al. (2017)
+
+[Original Data Source](https://www.science.smith.edu/wai-database/)
 
 I decided to choose the most recent study among the 12 selected publications, which was Feeney et al. (2017). This contains various grouping variables such as age, sex, and race/ethnicity. I chose Sex as the grouping variable because it is a common demographic factor in audiological studies and is likely to show differences in middle-ear characteristics.
 
