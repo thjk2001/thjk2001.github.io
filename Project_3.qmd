@@ -52,31 +52,60 @@ datatable(
 
 We are using the nycflights13 data which contains the flight information in New York airports in 2013. The above sample table includes all the relevant information for each flight schedule and also has a new column called time_of_day as an indicator for whether the flight is in the morning or in the evening.
 
-Most importantly, the data shows the departure delay time (in minutes). We will first define morning and evening flights. Morning flights are flights departing between 5:00am and 11:00am. Evening flights are flights departing from 5:00pm and 11:00pm (ex. First row, dep_time 517 means departure time is at 5:17am). We removed the flights that are not within these time ranges.
+Most importantly, the data shows the departure delay time (in minutes). A positive value means the flight was delayed. A negative value means the flight departed earlier than planned schedule. A value of zero indicates the flight departed on time. We will first define morning and evening flights. Morning flights are flights departing between 5:00am and 11:00am. Evening flights are flights departing from 5:00pm and 11:00pm (ex. First row, dep_time 517 means departure time is at 5:17am). We removed the flights that are not within these time ranges.
+
+Let's first check how many morning and evening flights there are, respectively.
+
+```{r}
+
+# Count the number of flights for each time_of_day
+flight_counts <- flights |>
+  group_by(time_of_day) |>
+  summarize(flight_count = n())
+
+# Create a bar chart
+ggplot(flight_counts, aes(x = time_of_day, y = flight_count, fill = time_of_day)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = flight_count), vjust = -0.5) +
+  labs(
+    title = "Number of Flights by Time of Day",
+    x = "Time of Day",
+    y = "Number of Flights"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+There are more morning flights than evening flights. Moreover, the difference is noticeable, with about 20,000 more flights classified as morning.
+
 
 Below we have the average delayed time for morning and evening flights.
 
 ```{r}
-library(knitr)
-library(kableExtra)
+library(ggplot2)
 
+# Calculate mean delays
 mean_delays <- flights |>
   group_by(time_of_day) |>
   summarize(mean_delay = mean(dep_delay, na.rm = TRUE))
 
-mean_delays |>
-  kable(
-    caption = "Mean Departure Delay by Time of Day",
-    col.names = c("Time of Day", "Mean Delay (minutes)"),
-    align = c("l", "c")
-  ) |>
-  kable_styling(
-    bootstrap_options = c("striped", "hover", "condensed"),
-    full_width = FALSE,
-    position = "center"
-  )
+# Create the bar chart
+ggplot(mean_delays, aes(x = time_of_day, y = mean_delay, fill = time_of_day)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = round(mean_delay, 2)), vjust = -0.5) +
+  labs(
+    title = "Mean Departure Delay by Time of Day",
+    x = "Time of Day",
+    y = "Mean Delay (minutes)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
 
 ```
+
+
+
 
 Then we calculate the observed differences.
 
@@ -90,7 +119,7 @@ obs_diff <- flights |>
 ```
 
 ```{r, echo = FALSE}
-cat("Observed Difference in Mean Delays (Evening - Morning):", obs_diff, "minutes\n")
+cat("Observed Difference in Mean Delays (Morning - Evening):", obs_diff, "minutes\n")
 ```
 
 
@@ -148,6 +177,51 @@ The visualization supports this as the red line falls outside the range of the s
 
 
 **Greater Insights**
+
+This study provides strong evidence for the correlation between time of day and average departure delay time. According to the analysis, evening flights have nearly a 20 minute longer delays than morning flights. This is interesting given the fact that there were significantly more morning flights than evening flights. While more number of flights does not automatically indicate more flight traffic, the results are interesting.
+
+
+Just to dive, some potential reasons could explain the longer delays for evening flights. Below are some factors to consider:
+
++ Cumulative Delays Throughout the Day: Flights in the evening are often impacted by delays that build up over the day (e.g., late arrivals, extended turnaround times).
++ Weather Conditions: Thunderstorms and other adverse weather conditions are more common in the late afternoon or early evening, especially in summer months.
++ Air Traffic Congestion: Evening hours are often a peak time for flights returning from major business or leisure destinations, leading to increased congestion in the air and at the airport.
++ Crew and Aircraft Rotation: If an aircraft or crew is late arriving from an earlier flight, it can cascade into delays for subsequent evening flights.
++ Runway Closures or Maintenance: Some airports schedule runway or terminal maintenance for late evenings, which can cause operational disruptions.
+
+To find some empirical reasons directly from the data, let's look at early departure flights (those that have negative values for dep_delay column). The observed means of departure delays that we calculated in the above analysis takes into account all flights, regardless of whether their status was on time, early departure, or delayed departure. If either morning or evening flights have a significant number of early flights, then, that may potentially have affected the averages.
+
+```{r}
+# Filter flights with dep_delay < 0 and group by time_of_day
+early_departures <- flights |>
+  filter(dep_delay < 0) |>
+  group_by(time_of_day) |>
+  summarize(early_flights = n())
+
+# Create a bar chart with adjusted limits and label position
+ggplot(early_departures, aes(x = time_of_day, y = early_flights, fill = time_of_day)) +
+  geom_bar(stat = "identity", width = 0.6) +
+  geom_text(aes(label = early_flights), vjust = -0.2, size = 5) +
+  labs(
+    title = "Number of Flights Departing Earlier Than Scheduled by Time of Day",
+    x = "Time of Day",
+    y = "Number of Early Departures"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),
+    axis.title.x = element_text(size = 12),
+    axis.title.y = element_text(size = 12),
+    axis.text = element_text(size = 10)
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+
+```
+
+Looking at the results, there are significantly more morning flights that departed earlier than scheduled. This has contributed to the significantly lower average departure delay for morning flights. This offers some empirical evidence based on our database as to why our calculated averages have a significant difference.
+
+While this particular caveat lends way to the argument for calculating the departure delay averages for those flights that were actually delayed, I believe this misleads the purpose of the study. You do not know whether your flight is going to be departing earlier than planned or delayed. We all expect our flights to depart on time. Therefore, simply calculating the averages for those flights that do actually get delayed misses this initial thought process. One particular flight can be delayed for some reason A. Well, that same reason A can be the basis for an early flight departure of another flight. Hence, I still believe it is more appropriate to examine all flights.
 
 So how can we interpret these results in a broader context? The current analysis is based on flights departing from NYC airports (JFK, LGA, EWR) in 2013 and data acquired under the assumption that morning and evening flights do not have missing delay information. This means the conclusion of a significant difference in mean delays applies only to NYC flights in 2013.
 
